@@ -1,0 +1,35 @@
+name: NPGuys
+version: 0.6.03
+author: Goldob
+main: pl.ragecraft.npguys.NPGuys
+depend: [Citizens]
+softdepend: [Vault, Quester, RPG Items]
+
+commands:
+  npguy:
+    description: "Dialogues management commands"
+    aliases: [npg]
+    permission: npguys.manage.commands
+    ussage: "Unknown command! Type /npguy for command list!"
+
+permissions:
+  npguys.*:
+    desciption: "Gives access to all NPGuys features"
+    default: op
+    children:
+      npguys.manage.*: true
+  npguys.manage.*:
+    description: "Gives access to NPGuys management commands"
+    children:
+      npguys.manage.dialogues: true
+      npguys.manage.npc: true
+      npguys.manage.commands: true
+  npguys.manage.npc:
+    description: "Gives access to NPGuy's management commands"
+    default: op
+  npguys.manage.commands:
+    description: "You need this to perform any NPGuys commands"
+    default: op
+  npguys.manage.dialogues:
+    description: "Gives access to dialogues management commands"
+    default: op

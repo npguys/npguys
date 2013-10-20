@@ -1,0 +1,21 @@
+conversation:
+  distance: 5.0
+  use-scroll: true
+gui:
+  headline: "Your answer"
+  npc:
+    message_format: "&9[&6NPGuys&9] %npc: &r%msg"
+    delay: 20
+  player:
+    message_format: "&9[&6NPGuys&9] %player: &r%msg"
+dialogues:
+  default:
+    shortcut: "default"
+    message: "This is default message."
+    npc_response:
+      message: "This is default NPC response"
+  exit:
+    shortcut: "Goodbye!"
+    message: "Goodbye, %npc!"
+    npc_response:
+      message: "Goodbye, %player!"
