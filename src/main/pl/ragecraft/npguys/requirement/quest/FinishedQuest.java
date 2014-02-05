@@ -5,9 +5,9 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.FailedToLoadException;
-import pl.ragecraft.npguys.InvalidCommandException;
-import pl.ragecraft.npguys.quester.QuesterManager;
+import pl.ragecraft.npguys.PluginsManager;
+import pl.ragecraft.npguys.exception.FailedToLoadException;
+import pl.ragecraft.npguys.exception.InvalidCommandException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 
@@ -20,7 +20,7 @@ public class FinishedQuest extends Requirement {
 
 	@Override
 	public boolean isMet(NPC npc, Player player) {
-		return QuesterManager.hasCompleted(player, quest);
+		return PluginsManager.getQuestHandler().hasCompleted(player, quest);
 	}
 
 	@Override

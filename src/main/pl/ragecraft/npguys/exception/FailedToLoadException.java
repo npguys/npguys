@@ -1,4 +1,4 @@
-package pl.ragecraft.npguys;
+package pl.ragecraft.npguys.exception;
 
 public class FailedToLoadException extends Exception {
 	/**

@@ -1,6 +1,4 @@
-package pl.ragecraft.npguys;
-
-import java.util.HashMap;
+package pl.ragecraft.npguys.exception;
 
 public class MessageNotFoundException extends Exception {
 	/**

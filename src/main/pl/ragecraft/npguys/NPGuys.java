@@ -29,7 +29,7 @@ public class NPGuys extends JavaPlugin {
 		}
 		
 		NPGuyManager.init(this);
-		PluginManager.init(this);
+		PluginsManager.init(this);
 		
 		NPGuyManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
 		NPGuyManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
@@ -38,7 +38,6 @@ public class NPGuys extends JavaPlugin {
 		NPGuyManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
 		NPGuyManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
 		
-	
 		NPGuyManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
 		NPGuyManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
 		NPGuyManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
@@ -47,7 +46,7 @@ public class NPGuys extends JavaPlugin {
 		
 		getCommand("npguy").setExecutor(new NPGuyCommands());
 		
-		PluginManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
+		PluginsManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
 	}
 	
 	public static NPGuys getPlugin() {

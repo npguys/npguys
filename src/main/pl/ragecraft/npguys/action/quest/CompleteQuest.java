@@ -5,11 +5,10 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.FailedToLoadException;
-import pl.ragecraft.npguys.InvalidCommandException;
+import pl.ragecraft.npguys.PluginsManager;
 import pl.ragecraft.npguys.action.Action;
-import pl.ragecraft.npguys.quester.QuesterManager;
-
+import pl.ragecraft.npguys.exception.FailedToLoadException;
+import pl.ragecraft.npguys.exception.InvalidCommandException;
 
 public class CompleteQuest extends Action {
 	String quest;
@@ -20,7 +19,7 @@ public class CompleteQuest extends Action {
 	
 	@Override
 	public void perform(NPC npc, Player player) {
-		QuesterManager.completeQuest(player, quest);
+		PluginsManager.getQuestHandler().completeQuest(player, quest);
 	}
 
 	@Override

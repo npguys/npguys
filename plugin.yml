@@ -1,5 +1,5 @@
 name: NPGuys
-version: 0.6.03
+version: 1.0 BETA
 author: Goldob
 main: pl.ragecraft.npguys.NPGuys
 depend: [Citizens]

@@ -1,13 +1,13 @@
-package pl.ragecraft.npguys;
+package pl.ragecraft.npguys.exception;
 
-public class NPGuyExistsException extends Exception {
+public class NPGuyAlreadyExistsException extends Exception {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	String npguy;
 	
-	public NPGuyExistsException(String npguy) {
+	public NPGuyAlreadyExistsException(String npguy) {
 		this.npguy = npguy;
 	}
 	

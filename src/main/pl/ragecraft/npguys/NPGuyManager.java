@@ -29,6 +29,12 @@ import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
+import pl.ragecraft.npguys.exception.ActionNotFoundException;
+import pl.ragecraft.npguys.exception.FailedToLoadException;
+import pl.ragecraft.npguys.exception.MessageNotFoundException;
+import pl.ragecraft.npguys.exception.NPGuyAlreadyExistsException;
+import pl.ragecraft.npguys.exception.NPGuyNotFoundException;
+import pl.ragecraft.npguys.exception.RequirementNotFoundException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 
@@ -212,9 +218,9 @@ public class NPGuyManager {
 		}
 	}
 	
-	public static void putData(String npguy, NPGuyData data) throws NPGuyExistsException {
+	public static void putData(String npguy, NPGuyData data) throws NPGuyAlreadyExistsException {
 		if ((npguys.containsKey(npguy))) {
-			throw new NPGuyExistsException(npguy);
+			throw new NPGuyAlreadyExistsException(npguy);
 		}
 		else {
 			npguys.put(npguy, data);

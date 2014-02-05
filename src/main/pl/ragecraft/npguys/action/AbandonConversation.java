@@ -5,9 +5,9 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.FailedToLoadException;
-import pl.ragecraft.npguys.InvalidCommandException;
 import pl.ragecraft.npguys.conversation.ConversationManager;
+import pl.ragecraft.npguys.exception.FailedToLoadException;
+import pl.ragecraft.npguys.exception.InvalidCommandException;
 
 
 public class AbandonConversation extends Action {

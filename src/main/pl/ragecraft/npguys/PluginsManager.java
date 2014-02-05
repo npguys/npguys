@@ -1,40 +1,34 @@
 package pl.ragecraft.npguys;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import pl.ragecraft.npguys.quester.NPGuysObjective;
+import pl.ragecraft.npguys.quest.QuestHandler;
+import pl.ragecraft.npguys.quest.handler.QuesterHandler;
 
 import com.gmail.molnardad.quester.Quester;
-import com.gmail.molnardad.quester.exceptions.ElementException;
 
 import net.citizensnpcs.api.CitizensPlugin;
 import net.milkbowl.vault.economy.Economy;
 
-public class PluginManager {
+public class PluginsManager {
 	private static Economy economy = null;
 	private static CitizensPlugin citizens = null;
-	private static Quester quester = null;
-
+	private static QuestHandler questHandler = null;
 	
 	public static void init(NPGuys plugin) {
 		setupCitizens(plugin);
 		//TODO setupEconomy(plugin);
-		setupQuester(plugin);
+		setupQuestHandler(plugin);
 	}
 
-	private static void setupQuester(NPGuys plugin) {
-		if (!plugin.getServer().getPluginManager().isPluginEnabled("Quester")) {
-			return;
-		}
-		quester = (Quester)plugin.getServer().getPluginManager().getPlugin("Quester");
-		if (quester == null) {
-			return;
-		}
-		try {
-			quester.getElementManager().register(NPGuysObjective.class);
-		} 
-		catch (ElementException e) {
-			e.printStackTrace();
+	private static void setupQuestHandler(NPGuys plugin) {
+		if(plugin.getServer().getPluginManager().isPluginEnabled("Quester")) {
+			Plugin questerPlugin = plugin.getServer().getPluginManager().getPlugin("Quester");
+			if(questerPlugin instanceof Quester) {
+				questHandler = new QuesterHandler((Quester)questerPlugin);
+				return;
+			}
 		}
 	}
 
@@ -57,7 +51,7 @@ public class PluginManager {
 		return citizens;
 	}
 	
-	public static Quester getQuester() {
-		return quester;
+	public static QuestHandler getQuestHandler() {
+		return questHandler;
 	}
 }

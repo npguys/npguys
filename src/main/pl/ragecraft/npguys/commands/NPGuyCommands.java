@@ -12,16 +12,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import pl.ragecraft.npguys.ActionNotFoundException;
-import pl.ragecraft.npguys.InvalidCommandException;
 import pl.ragecraft.npguys.NPGuy;
 import pl.ragecraft.npguys.NPGuyData;
-import pl.ragecraft.npguys.NPGuyExistsException;
 import pl.ragecraft.npguys.NPGuyManager;
-import pl.ragecraft.npguys.NPGuyNotFoundException;
-import pl.ragecraft.npguys.RequirementNotFoundException;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
+import pl.ragecraft.npguys.exception.ActionNotFoundException;
+import pl.ragecraft.npguys.exception.InvalidCommandException;
+import pl.ragecraft.npguys.exception.NPGuyAlreadyExistsException;
+import pl.ragecraft.npguys.exception.NPGuyNotFoundException;
+import pl.ragecraft.npguys.exception.RequirementNotFoundException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 public class NPGuyCommands implements CommandExecutor {
@@ -74,7 +74,7 @@ public class NPGuyCommands implements CommandExecutor {
 					try {
 						NPGuyManager.putData(data.name, data);
 						sender.sendMessage("NPGuy created!");
-					} catch (NPGuyExistsException e) {
+					} catch (NPGuyAlreadyExistsException e) {
 						sender.sendMessage(e.getMessage());
 					}
 				}

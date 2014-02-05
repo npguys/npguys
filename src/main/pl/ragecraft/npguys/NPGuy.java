@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
+import pl.ragecraft.npguys.exception.MessageNotFoundException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 

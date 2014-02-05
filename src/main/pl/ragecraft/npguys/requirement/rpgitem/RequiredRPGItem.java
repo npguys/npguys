@@ -6,8 +6,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import pl.ragecraft.npguys.FailedToLoadException;
-import pl.ragecraft.npguys.InvalidCommandException;
+import pl.ragecraft.npguys.exception.FailedToLoadException;
+import pl.ragecraft.npguys.exception.InvalidCommandException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 import think.rpgitems.item.ItemManager;
