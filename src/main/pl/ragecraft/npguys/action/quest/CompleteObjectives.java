@@ -8,7 +8,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.PluginsManager;
+import pl.ragecraft.npguys.ElementsManager;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
@@ -23,7 +23,7 @@ public class CompleteObjectives extends Action {
 	
 	@Override
 	public void perform(NPC npc, Player player) {
-		PluginsManager.getQuestHandler().completeObjectives(player, quest, objectives);	
+		ElementsManager.getQuestHandler().completeObjectives(player, quest, objectives);	
 	}
 
 	@Override

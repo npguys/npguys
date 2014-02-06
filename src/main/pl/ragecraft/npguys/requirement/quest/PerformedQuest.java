@@ -8,7 +8,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.PluginsManager;
+import pl.ragecraft.npguys.ElementsManager;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
 import pl.ragecraft.npguys.requirement.Requirement;
@@ -24,8 +24,8 @@ public class PerformedQuest extends Requirement {
 	
 	@Override
 	public boolean isMet(NPC npc, Player player) {
-		if(PluginsManager.getQuestHandler().isPerforming(player, quest)) {
-			return PluginsManager.getQuestHandler().hasActiveObjectives(player, quest, objectives);
+		if(ElementsManager.getQuestHandler().isPerforming(player, quest)) {
+			return ElementsManager.getQuestHandler().hasActiveObjectives(player, quest, objectives);
 		}
 		return false;
 	}

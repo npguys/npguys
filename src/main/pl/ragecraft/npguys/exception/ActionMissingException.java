@@ -1,13 +1,13 @@
 package pl.ragecraft.npguys.exception;
 
-public class ActionNotFoundException extends Exception {
+public class ActionMissingException extends ElementMissingException {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	String action;
 	
-	public ActionNotFoundException(String action) {
+	public ActionMissingException(String action) {
 		this.action = action;
 	}
 	

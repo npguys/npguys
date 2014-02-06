@@ -1,13 +1,13 @@
 package pl.ragecraft.npguys.exception;
 
-public class RequirementNotFoundException extends Exception {
+public class RequirementMissingException extends ElementMissingException {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	String requirement;
 	
-	public RequirementNotFoundException(String requirement) {
+	public RequirementMissingException(String requirement) {
 		this.requirement = requirement;
 	}
 	

@@ -12,16 +12,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import pl.ragecraft.npguys.ElementsManager;
 import pl.ragecraft.npguys.NPGuy;
 import pl.ragecraft.npguys.NPGuyData;
-import pl.ragecraft.npguys.NPGuyManager;
+import pl.ragecraft.npguys.DialoguesManager;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
-import pl.ragecraft.npguys.exception.ActionNotFoundException;
+import pl.ragecraft.npguys.exception.ActionMissingException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
 import pl.ragecraft.npguys.exception.NPGuyAlreadyExistsException;
 import pl.ragecraft.npguys.exception.NPGuyNotFoundException;
-import pl.ragecraft.npguys.exception.RequirementNotFoundException;
+import pl.ragecraft.npguys.exception.RequirementMissingException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 public class NPGuyCommands implements CommandExecutor {
@@ -38,7 +39,7 @@ public class NPGuyCommands implements CommandExecutor {
 			return true;
 		case 1:
 			try {
-				data = NPGuyManager.getData(args[0]);
+				data = DialoguesManager.getData(args[0]);
 				
 				StringBuilder display = new StringBuilder();
 				display.append("npguy: ").append(data.name).append('\n');
@@ -67,12 +68,12 @@ public class NPGuyCommands implements CommandExecutor {
 					data.name = name;
 					data.welcomeMessage = "default";
 					
-					data.dialogues.put("default", NPGuyManager.getDefaultMessage());
+					data.dialogues.put("default", DialoguesManager.getDefaultMessage());
 					
 					
 					
 					try {
-						NPGuyManager.putData(data.name, data);
+						DialoguesManager.putData(data.name, data);
 						sender.sendMessage("NPGuy created!");
 					} catch (NPGuyAlreadyExistsException e) {
 						sender.sendMessage(e.getMessage());
@@ -85,7 +86,7 @@ public class NPGuyCommands implements CommandExecutor {
 			}
 			else {
 				try {
-					data = NPGuyManager.getData(args[0]);
+					data = DialoguesManager.getData(args[0]);
 				}
 				catch (NPGuyNotFoundException e) {
 					sender.sendMessage(e.getMessage());
@@ -98,7 +99,7 @@ public class NPGuyCommands implements CommandExecutor {
 					return true;
 				}
 				try {
-					NPGuyManager.removeData(data.name);
+					DialoguesManager.removeData(data.name);
 					sender.sendMessage("NPGuy data removed!");
 				}
 				catch (NPGuyNotFoundException e) {
@@ -220,7 +221,7 @@ public class NPGuyCommands implements CommandExecutor {
 				}
 				if (args[1].equalsIgnoreCase("create")) {
 					if (args.length == 2) {
-						message = NPGuyManager.getDefaultMessage();
+						message = DialoguesManager.getDefaultMessage();
 						if(data.dialogues.containsKey(args[0])) {
 							sender.sendMessage("Dialogue already exists!");
 						}
@@ -337,7 +338,7 @@ public class NPGuyCommands implements CommandExecutor {
 							}
 							else {
 								try {
-									Requirement requirement = NPGuyManager.newRequirement(args[3]);
+									Requirement requirement = ElementsManager.newRequirement(args[3]);
 									
 									List<String> reqData = new ArrayList<String>();
 									for (int i = 4; i < args.length; i++) {
@@ -350,7 +351,7 @@ public class NPGuyCommands implements CommandExecutor {
 									}
 									
 									message.getRequirements().add(requirement);
-								} catch (RequirementNotFoundException e) {
+								} catch (RequirementMissingException e) {
 									sender.sendMessage(e.getMessage());
 								} catch (InvalidCommandException e) {
 									sender.sendMessage(e.getMessage());
@@ -386,7 +387,7 @@ public class NPGuyCommands implements CommandExecutor {
 							}
 							else {
 								try {
-									Action action = NPGuyManager.newAction(args[3]);
+									Action action = ElementsManager.newAction(args[3]);
 									
 									List<String> actData = new ArrayList<String>();
 									for (int i = 4; i < args.length; i++) {
@@ -395,7 +396,7 @@ public class NPGuyCommands implements CommandExecutor {
 									action.fromCommand(actData.toArray(new String[actData.size()]));
 									
 									message.getActions().add(action);
-								} catch (ActionNotFoundException e) {
+								} catch (ActionMissingException e) {
 									sender.sendMessage(e.getMessage());
 								} catch (InvalidCommandException e) {
 									sender.sendMessage(e.getMessage());

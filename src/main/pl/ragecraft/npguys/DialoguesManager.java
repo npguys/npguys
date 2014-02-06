@@ -2,7 +2,6 @@ package pl.ragecraft.npguys;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import pl.ragecraft.npguys.action.Action;
@@ -29,24 +27,22 @@ import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
-import pl.ragecraft.npguys.exception.ActionNotFoundException;
+import pl.ragecraft.npguys.exception.ActionMissingException;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.MessageNotFoundException;
 import pl.ragecraft.npguys.exception.NPGuyAlreadyExistsException;
 import pl.ragecraft.npguys.exception.NPGuyNotFoundException;
-import pl.ragecraft.npguys.exception.RequirementNotFoundException;
+import pl.ragecraft.npguys.exception.RequirementMissingException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 
-public class NPGuyManager {
+public class DialoguesManager {
 	private static NPGuys plugin = null;
 	private static File npcs;
 	private static Map<String, NPGuyData> npguys = new HashMap<String, NPGuyData>();
-	private static Map<String, Class<? extends Action>> actions = new HashMap<String, Class<? extends Action>>();
-	private static Map<String, Class<? extends Requirement>> requirements = new HashMap<String, Class<? extends Requirement>>();
 	
 	public static void init(final NPGuys plugin) {
-		NPGuyManager.plugin = plugin;
+		DialoguesManager.plugin = plugin;
 		
 		npcs = new File(plugin.getDataFolder(), "npc");
 		if (!npcs.exists()) {
@@ -84,24 +80,19 @@ public class NPGuyManager {
 				ConfigurationSection requirement = data.getConfigurationSection("dialogues."+messageUid+".requirements."+key);
 				
 				String type = requirement.getString("type");
-				if (requirements.containsKey(type)) {
-					try {
-						Requirement loadedRequirement = newRequirement(type);
-						loadedRequirement.load(requirement);
-						if(requirement.contains("reversed")) {
-							loadedRequirement.setReversed(requirement.getBoolean("reversed"));
-						}
-						loadedRequirements.add(loadedRequirement);
-					} catch (FailedToLoadException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (RequirementNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				try {
+					Requirement loadedRequirement = ElementsManager.newRequirement(type);
+					loadedRequirement.load(requirement);
+					if(requirement.contains("reversed")) {
+						loadedRequirement.setReversed(requirement.getBoolean("reversed"));
 					}
-				}
-				else {
-					//TODO Handle exception
+					loadedRequirements.add(loadedRequirement);
+				} catch (FailedToLoadException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RequirementMissingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			
@@ -113,21 +104,14 @@ public class NPGuyManager {
 				ConfigurationSection action = data.getConfigurationSection("dialogues."+messageUid+".actions."+key);
 				
 				String type = action.getString("type");
-				if (actions.containsKey(type)) {
-					try {
-						Action loadedAction = newAction(type);
-						loadedAction.load(action);
-						loadedActions.add(loadedAction);
-					} catch (FailedToLoadException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ActionNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				else {
-					//TODO Handle exception
+				try {
+					Action loadedAction = ElementsManager.newAction(type);
+					loadedAction.load(action);
+					loadedActions.add(loadedAction);
+				} catch (FailedToLoadException e) {
+					e.printStackTrace();
+				} catch (ActionMissingException e) {
+					e.printStackTrace();
 				}
 			}
 			
@@ -240,62 +224,6 @@ public class NPGuyManager {
 		return npguys.get(npguy).dialogues.get(uid);
 	}
 	
-	public static Action newAction(String name) throws ActionNotFoundException {
-		try {
-			if(actions.containsKey(name)) {
-				return actions.get(name).getConstructor(String.class).newInstance(name);
-			}
-			else {
-				throw new ActionNotFoundException(name);
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public static void registerAction(String name, Class<? extends Action> clazz) {
-		actions.put(name.toUpperCase(), clazz);
-	}
-	
-	public static Requirement newRequirement(String name) throws RequirementNotFoundException {
-		try {
-			if (requirements.containsKey(name)) {
-				return requirements.get(name).getConstructor(String.class).newInstance(name);
-			}
-			else {
-				throw new RequirementNotFoundException(name);
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public static void registerRequirement(String name, Class<? extends Requirement> clazz) {
-		requirements.put(name.toUpperCase(), clazz);
-	}
-	
 	public static PlayerMessage getDefaultMessage() {
 		List<Action> actions = new ArrayList<Action>();
 		List<Requirement> requirements = new ArrayList<Requirement>();
@@ -307,8 +235,8 @@ public class NPGuyManager {
 	public static PlayerMessage getExitMessage() {
 		List<Action> actions = new ArrayList<Action>();
 		try {
-			actions.add(newAction("ABANDON_CONVERSATION"));
-		} catch (ActionNotFoundException e) {
+			actions.add(ElementsManager.newAction("ABANDON_CONVERSATION"));
+		} catch (ActionMissingException e) {
 			e.printStackTrace();
 		}
 		List<Requirement> requirements = new ArrayList<Requirement>();

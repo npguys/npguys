@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import pl.ragecraft.npguys.NPGuy;
-import pl.ragecraft.npguys.NPGuyManager;
+import pl.ragecraft.npguys.DialoguesManager;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.gui.GUIManager;
 
@@ -27,7 +27,7 @@ public class Conversation {
 	public void beginConversation() {
 		choosenResponse = 1;
 		possibleResponses = new ArrayList<PlayerMessage>();
-		possibleResponses.add(NPGuyManager.getWelcomeMessage(npc.getUID()));
+		possibleResponses.add(DialoguesManager.getWelcomeMessage(npc.getUID()));
 		continueConversation();
 	}
 	

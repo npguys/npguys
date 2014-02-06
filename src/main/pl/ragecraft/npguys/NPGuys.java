@@ -28,25 +28,25 @@ public class NPGuys extends JavaPlugin {
 			getDataFolder().mkdir();
 		}
 		
-		NPGuyManager.init(this);
-		PluginsManager.init(this);
+		ElementsManager.init(this);
+		DialoguesManager.init(this);
 		
-		NPGuyManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
-		NPGuyManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
-		NPGuyManager.registerAction("BEGIN_QUEST", BeginQuest.class);
-		NPGuyManager.registerAction("FINISH_QUEST", CompleteQuest.class);
-		NPGuyManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
-		NPGuyManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
+		ElementsManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
+		ElementsManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
+		ElementsManager.registerAction("BEGIN_QUEST", BeginQuest.class);
+		ElementsManager.registerAction("FINISH_QUEST", CompleteQuest.class);
+		ElementsManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
+		ElementsManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
 		
-		NPGuyManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
-		NPGuyManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
-		NPGuyManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
+		ElementsManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
+		ElementsManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
+		ElementsManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
 		
 		//TODO Unsafe code
 		
 		getCommand("npguy").setExecutor(new NPGuyCommands());
 		
-		PluginsManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
+		ElementsManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
 	}
 	
 	public static NPGuys getPlugin() {
@@ -55,7 +55,7 @@ public class NPGuys extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		NPGuyManager.saveAll();
+		DialoguesManager.saveAll();
 	}
 	
 }
