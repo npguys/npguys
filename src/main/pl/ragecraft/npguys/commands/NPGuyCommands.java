@@ -12,10 +12,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import pl.ragecraft.npguys.ElementsManager;
+import pl.ragecraft.npguys.ElementManager;
 import pl.ragecraft.npguys.NPGuy;
 import pl.ragecraft.npguys.NPGuyData;
-import pl.ragecraft.npguys.DialoguesManager;
+import pl.ragecraft.npguys.DialogueManager;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
 import pl.ragecraft.npguys.exception.ActionMissingException;
@@ -39,7 +39,7 @@ public class NPGuyCommands implements CommandExecutor {
 			return true;
 		case 1:
 			try {
-				data = DialoguesManager.getData(args[0]);
+				data = DialogueManager.getData(args[0]);
 				
 				StringBuilder display = new StringBuilder();
 				display.append("npguy: ").append(data.name).append('\n');
@@ -68,12 +68,12 @@ public class NPGuyCommands implements CommandExecutor {
 					data.name = name;
 					data.welcomeMessage = "default";
 					
-					data.dialogues.put("default", DialoguesManager.getDefaultMessage());
+					data.dialogues.put("default", DialogueManager.getDefaultMessage());
 					
 					
 					
 					try {
-						DialoguesManager.putData(data.name, data);
+						DialogueManager.putData(data.name, data);
 						sender.sendMessage("NPGuy created!");
 					} catch (NPGuyAlreadyExistsException e) {
 						sender.sendMessage(e.getMessage());
@@ -86,7 +86,7 @@ public class NPGuyCommands implements CommandExecutor {
 			}
 			else {
 				try {
-					data = DialoguesManager.getData(args[0]);
+					data = DialogueManager.getData(args[0]);
 				}
 				catch (NPGuyNotFoundException e) {
 					sender.sendMessage(e.getMessage());
@@ -99,7 +99,7 @@ public class NPGuyCommands implements CommandExecutor {
 					return true;
 				}
 				try {
-					DialoguesManager.removeData(data.name);
+					DialogueManager.removeData(data.name);
 					sender.sendMessage("NPGuy data removed!");
 				}
 				catch (NPGuyNotFoundException e) {
@@ -221,7 +221,7 @@ public class NPGuyCommands implements CommandExecutor {
 				}
 				if (args[1].equalsIgnoreCase("create")) {
 					if (args.length == 2) {
-						message = DialoguesManager.getDefaultMessage();
+						message = DialogueManager.getDefaultMessage();
 						if(data.dialogues.containsKey(args[0])) {
 							sender.sendMessage("Dialogue already exists!");
 						}
@@ -338,7 +338,7 @@ public class NPGuyCommands implements CommandExecutor {
 							}
 							else {
 								try {
-									Requirement requirement = ElementsManager.newRequirement(args[3]);
+									Requirement requirement = ElementManager.newRequirement(args[3]);
 									
 									List<String> reqData = new ArrayList<String>();
 									for (int i = 4; i < args.length; i++) {
@@ -387,7 +387,7 @@ public class NPGuyCommands implements CommandExecutor {
 							}
 							else {
 								try {
-									Action action = ElementsManager.newAction(args[3]);
+									Action action = ElementManager.newAction(args[3]);
 									
 									List<String> actData = new ArrayList<String>();
 									for (int i = 4; i < args.length; i++) {

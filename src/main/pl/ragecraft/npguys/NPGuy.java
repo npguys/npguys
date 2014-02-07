@@ -38,7 +38,7 @@ public class NPGuy extends Trait {
 		
 		for(String responseUid : message.getPossibleResponses()) {
 			try {
-				PlayerMessage response = DialoguesManager.getPlayerMessage(uid, responseUid);
+				PlayerMessage response = DialogueManager.getPlayerMessage(uid, responseUid);
 				if (areRequirementsDone(player, response)) {
 					responseList.add(response);
 				}
@@ -48,7 +48,7 @@ public class NPGuy extends Trait {
 		}
 		
 		if(responseList.isEmpty()) {
-			responseList.add(DialoguesManager.getExitMessage());
+			responseList.add(DialogueManager.getExitMessage());
 		}
 		
 		return responseList;

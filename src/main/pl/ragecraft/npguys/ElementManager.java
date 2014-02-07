@@ -5,21 +5,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.exception.ActionMissingException;
 import pl.ragecraft.npguys.exception.RequirementMissingException;
 import pl.ragecraft.npguys.quest.QuestHandler;
 import pl.ragecraft.npguys.quest.handler.QuesterHandler;
+import pl.ragecraft.npguys.quest.handler.QuestsHandler;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 import com.gmail.molnardad.quester.Quester;
 
+import me.blackvein.quests.Quests;
 import net.citizensnpcs.api.CitizensPlugin;
 import net.milkbowl.vault.economy.Economy;
 
-public class ElementsManager {
+public class ElementManager {
 	private static Economy economy = null;
 	private static CitizensPlugin citizens = null;
 	private static QuestHandler questHandler = null;
@@ -29,7 +30,6 @@ public class ElementsManager {
 	
 	public static void init(NPGuys plugin) {
 		setupCitizens(plugin);
-		//TODO setupEconomy(plugin);
 		setupQuestHandler(plugin);
 		
 		actions = new HashMap<String, Class<? extends Action>>();
@@ -44,18 +44,18 @@ public class ElementsManager {
 				return;
 			}
 		}
+		if (plugin.getServer().getPluginManager().isPluginEnabled("Quests")) {
+			Plugin questsPlugin = plugin.getServer().getPluginManager().getPlugin("Quester");
+			if(questsPlugin instanceof Quests) {
+				questHandler = new QuestsHandler((Quests)questsPlugin);
+				return;
+			}
+		}
 	}
 
 	private static void setupCitizens(NPGuys plugin) {
 		citizens = (CitizensPlugin)plugin.getServer().getPluginManager().getPlugin("Citizens");
 	}
-
-	private static void setupEconomy(NPGuys plugin)	{	
-        RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
-    }
 	
 	public static Action newAction(String name) throws ActionMissingException {
 		try {
@@ -123,5 +123,9 @@ public class ElementsManager {
 	
 	public static QuestHandler getQuestHandler() {
 		return questHandler;
+	}
+	
+	public static void setQuestHandler(QuestHandler questHandler) {
+		ElementManager.questHandler = questHandler;
 	}
 }

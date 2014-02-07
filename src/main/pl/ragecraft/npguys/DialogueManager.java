@@ -36,13 +36,13 @@ import pl.ragecraft.npguys.exception.RequirementMissingException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 
-public class DialoguesManager {
+public class DialogueManager {
 	private static NPGuys plugin = null;
 	private static File npcs;
 	private static Map<String, NPGuyData> npguys = new HashMap<String, NPGuyData>();
 	
 	public static void init(final NPGuys plugin) {
-		DialoguesManager.plugin = plugin;
+		DialogueManager.plugin = plugin;
 		
 		npcs = new File(plugin.getDataFolder(), "npc");
 		if (!npcs.exists()) {
@@ -81,7 +81,7 @@ public class DialoguesManager {
 				
 				String type = requirement.getString("type");
 				try {
-					Requirement loadedRequirement = ElementsManager.newRequirement(type);
+					Requirement loadedRequirement = ElementManager.newRequirement(type);
 					loadedRequirement.load(requirement);
 					if(requirement.contains("reversed")) {
 						loadedRequirement.setReversed(requirement.getBoolean("reversed"));
@@ -105,7 +105,7 @@ public class DialoguesManager {
 				
 				String type = action.getString("type");
 				try {
-					Action loadedAction = ElementsManager.newAction(type);
+					Action loadedAction = ElementManager.newAction(type);
 					loadedAction.load(action);
 					loadedActions.add(loadedAction);
 				} catch (FailedToLoadException e) {
@@ -235,7 +235,7 @@ public class DialoguesManager {
 	public static PlayerMessage getExitMessage() {
 		List<Action> actions = new ArrayList<Action>();
 		try {
-			actions.add(ElementsManager.newAction("ABANDON_CONVERSATION"));
+			actions.add(ElementManager.newAction("ABANDON_CONVERSATION"));
 		} catch (ActionMissingException e) {
 			e.printStackTrace();
 		}

@@ -5,7 +5,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.ElementsManager;
+import pl.ragecraft.npguys.ElementManager;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
@@ -20,7 +20,7 @@ public class BeginQuest extends Action {
 
 	@Override
 	public void perform(NPC npc, Player player) {
-		ElementsManager.getQuestHandler().beginQuest(player, quest);
+		ElementManager.getQuestHandler().beginQuest(player, quest);
 	}
 
 	@Override

@@ -28,25 +28,25 @@ public class NPGuys extends JavaPlugin {
 			getDataFolder().mkdir();
 		}
 		
-		ElementsManager.init(this);
-		DialoguesManager.init(this);
+		ElementManager.init(this);
+		DialogueManager.init(this);
 		
-		ElementsManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
-		ElementsManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
-		ElementsManager.registerAction("BEGIN_QUEST", BeginQuest.class);
-		ElementsManager.registerAction("FINISH_QUEST", CompleteQuest.class);
-		ElementsManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
-		ElementsManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
+		ElementManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
+		ElementManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
+		ElementManager.registerAction("BEGIN_QUEST", BeginQuest.class);
+		ElementManager.registerAction("FINISH_QUEST", CompleteQuest.class);
+		ElementManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
+		ElementManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
 		
-		ElementsManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
-		ElementsManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
-		ElementsManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
+		ElementManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
+		ElementManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
+		ElementManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
 		
 		//TODO Unsafe code
 		
 		getCommand("npguy").setExecutor(new NPGuyCommands());
 		
-		ElementsManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
+		ElementManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
 	}
 	
 	public static NPGuys getPlugin() {
@@ -55,7 +55,7 @@ public class NPGuys extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		DialoguesManager.saveAll();
+		DialogueManager.saveAll();
 	}
 	
 }

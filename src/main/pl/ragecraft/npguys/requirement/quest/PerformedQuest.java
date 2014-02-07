@@ -8,7 +8,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.ElementsManager;
+import pl.ragecraft.npguys.ElementManager;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
 import pl.ragecraft.npguys.requirement.Requirement;
@@ -24,8 +24,8 @@ public class PerformedQuest extends Requirement {
 	
 	@Override
 	public boolean isMet(NPC npc, Player player) {
-		if(ElementsManager.getQuestHandler().isPerforming(player, quest)) {
-			return ElementsManager.getQuestHandler().hasActiveObjectives(player, quest, objectives);
+		if(ElementManager.getQuestHandler().isPerforming(player, quest)) {
+			return ElementManager.getQuestHandler().hasActiveObjectives(player, quest, objectives);
 		}
 		return false;
 	}
@@ -40,9 +40,7 @@ public class PerformedQuest extends Requirement {
 		}
 		if (data.contains("objectives")) {
 			if (data.get("objectives") instanceof List<?>) {
-				for (int objective : data.getIntegerList("objectives")) {
-					objectives.add(objective);
-				}
+				data.getIntegerList("objectives");
 			}
 			else {
 				throw new FailedToLoadException("Invalid objectives! Objectives must be a valid integer list!");

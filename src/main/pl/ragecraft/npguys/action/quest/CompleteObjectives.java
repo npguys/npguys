@@ -8,7 +8,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.ElementsManager;
+import pl.ragecraft.npguys.ElementManager;
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
@@ -23,7 +23,7 @@ public class CompleteObjectives extends Action {
 	
 	@Override
 	public void perform(NPC npc, Player player) {
-		ElementsManager.getQuestHandler().completeObjectives(player, quest, objectives);	
+		ElementManager.getQuestHandler().completeObjectives(player, quest, objectives);	
 	}
 
 	@Override
@@ -35,9 +35,7 @@ public class CompleteObjectives extends Action {
 			throw new FailedToLoadException("Quest UID missing!");
 		}
 		if (data.contains("objectives") && data.get("objectives") instanceof List<?>) {
-			for (int objective : data.getIntegerList("objectives")) {
-				objectives.add(objective);
-			}
+			objectives.addAll(data.getIntegerList("objectives"));
 			if (objectives.size() < 1) {
 				throw new FailedToLoadException("Quest objectives missing!");
 			}
