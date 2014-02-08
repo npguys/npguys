@@ -1,13 +1,15 @@
 conversation:
   distance: 5.0
-  use-scroll: true
-gui:
-  headline: "Your answer"
-  npc:
-    message_format: "&9[&6NPGuys&9] %npc: &r%msg"
-    delay: 20
-  player:
-    message_format: "&9[&6NPGuys&9] %player: &r%msg"
+ui:
+  default: "scoreboard"
+  configs:
+    scoreboard:
+      headline: "Your answer"
+      npc:
+        message_format: "&9[&6NPGuys&9] %npc: &r%msg"
+        delay: 20
+      player:
+        message_format: "&9[&6NPGuys&9] %player: &r%msg"
 dialogues:
   default:
     shortcut: "default"

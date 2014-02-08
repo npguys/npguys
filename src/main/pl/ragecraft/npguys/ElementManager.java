@@ -4,15 +4,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import pl.ragecraft.npguys.action.Action;
+import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.exception.ActionMissingException;
 import pl.ragecraft.npguys.exception.RequirementMissingException;
+import pl.ragecraft.npguys.exception.UIMissingException;
 import pl.ragecraft.npguys.quest.QuestHandler;
 import pl.ragecraft.npguys.quest.handler.QuesterHandler;
 import pl.ragecraft.npguys.quest.handler.QuestsHandler;
 import pl.ragecraft.npguys.requirement.Requirement;
+import pl.ragecraft.npguys.ui.ConversationUI;
 
 import com.gmail.molnardad.quester.Quester;
 
@@ -27,6 +31,9 @@ public class ElementManager {
 	
 	private static Map<String, Class<? extends Action>> actions;
 	private static Map<String, Class<? extends Requirement>> requirements;
+	private static Map<String, Class<? extends ConversationUI>> uiTypes;
+	
+	private static String defaultUI;
 	
 	public static void init(NPGuys plugin) {
 		setupCitizens(plugin);
@@ -34,6 +41,9 @@ public class ElementManager {
 		
 		actions = new HashMap<String, Class<? extends Action>>();
 		requirements = new HashMap<String, Class<? extends Requirement>>();
+		uiTypes = new HashMap<String, Class<? extends ConversationUI>>();
+		
+		defaultUI = null;
 	}
 
 	private static void setupQuestHandler(NPGuys plugin) {
@@ -127,5 +137,43 @@ public class ElementManager {
 	
 	public static void setQuestHandler(QuestHandler questHandler) {
 		ElementManager.questHandler = questHandler;
+	}
+	
+	public static void registerUI(String name, Class<? extends ConversationUI> clazz) {
+		defaultUI = name;
+		uiTypes.put(name.toUpperCase(), clazz);
+		ConfigurationSection uiConfig = NPGuys.getPlugin().getConfig().getConfigurationSection("ui.configs."+name.toLowerCase());
+		try {
+			newUI(null).init(uiConfig);
+		} catch (UIMissingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static ConversationUI newUI(String uiName, Conversation conversation) throws UIMissingException {
+		try {
+			if (uiTypes.containsKey(uiName)) {
+				return uiTypes.get(uiName).getConstructor(Conversation.class).newInstance(conversation);
+			} else {
+				throw new UIMissingException(uiName);
+			}
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static ConversationUI newUI(Conversation conversation) throws UIMissingException {
+		return newUI(defaultUI, conversation);
 	}
 }

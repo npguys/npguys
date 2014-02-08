@@ -5,18 +5,18 @@ import java.util.HashMap;
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 import pl.ragecraft.npguys.NPGuy;
-import pl.ragecraft.npguys.gui.GUIManager;
-
-
+import pl.ragecraft.npguys.NPGuys;
+import pl.ragecraft.npguys.exception.UIMissingException;
 
 public class ConversationManager {
 	private static HashMap<Player, Conversation> conversations = new HashMap<Player, Conversation>();
 
 	public static void endConversation(Player caller, NPC npc) {
 		Conversation conversation = conversations.get(caller);
-		if(conversation.getNPC() != npc) {
+		if(conversation.getNPGuy() != npc) {
 			return;
 		}
 		endConversation(caller);
@@ -25,17 +25,27 @@ public class ConversationManager {
 
 	public static void endConversation(Player caller) {
 		Conversation conversation = conversations.get(caller);
-		if (conversation == null) {
+		if (conversation == null) 
 			return;
-		}
-		conversation.end();
-		GUIManager.closeGUI(caller);
+		
 		conversations.remove(caller);	
+		conversation.end();
+		HandlerList.unregisterAll(conversation.getUI());
 	}
 
 	public static void beginConversation(Player caller, NPGuy npc){
-		conversations.put(caller, new Conversation(caller, npc));
-		conversations.get(caller).beginConversation();
+		endConversation(caller);
+		try {
+			Conversation conversation;
+			conversation = new Conversation(caller, npc);
+			
+			conversations.put(caller, conversation);
+			
+			NPGuys.getPlugin().getServer().getPluginManager().registerEvents(conversation.getUI(), NPGuys.getPlugin());
+			conversation.beginConversation();
+		} catch (UIMissingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static Conversation getConversationByCaller(Player player) {
@@ -50,7 +60,7 @@ public class ConversationManager {
 
 	public static void endConversations(NPGuy npguy) {
 		for (Conversation conversation : conversations.values()) {
-			if (conversation.getNPC() == npguy) {
+			if (conversation.getNPGuy() == npguy) {
 				endConversation(conversation.getPlayer());
 			}
 		}

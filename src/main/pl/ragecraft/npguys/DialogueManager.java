@@ -248,70 +248,16 @@ public class DialogueManager {
 	private static class EventListener implements Listener {
 		@SuppressWarnings("unused")
 		@EventHandler
-		public void onSlotChange(PlayerItemHeldEvent event) {
-			if (plugin.getConfig().getBoolean("conversation.use-scroll")) {
-				Conversation conversation = ConversationManager.getConversationByCaller(event.getPlayer());
-				if (conversation != null) {
-					int oldSlot = event.getPreviousSlot();
-					int newSlot = event.getNewSlot();
-					
-					Location playerLoc = conversation.getPlayer().getEyeLocation();
-					Location npcLoc = conversation.getNPC().getNPC().getBukkitEntity().getEyeLocation();
-					Vector toCenter = new Vector(npcLoc.getX()-playerLoc.getX(), npcLoc.getY()-playerLoc.getY(), npcLoc.getZ()-playerLoc.getZ());
-					Vector direction = playerLoc.getDirection();
-					if (direction.angle(toCenter) < Math.atan(0.5/playerLoc.distance(npcLoc))) {
-						if (newSlot == oldSlot+1 || (newSlot == 0 && oldSlot == 8)) {
-							conversation.changeResponse(false);
-						}
-						if (newSlot == oldSlot-1 || (newSlot == 8 && oldSlot == 0)) {
-						conversation.changeResponse(true);
-						}
-						event.setCancelled(true);
-					}
-				}
-			}
-		}
-		
-		@SuppressWarnings("unused")
-		@EventHandler
 		public void onRightClick(NPCRightClickEvent event) {
-				Player player = event.getClicker();
-				NPC npc = event.getNPC();
-				if (player.getLocation().distance(npc.getBukkitEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
-					return;
-				}
-				if (!npc.hasTrait(NPGuy.class)) {
-					return;
-				}
-				Conversation conversation = ConversationManager.getConversationByCaller(player);
-				if (conversation == null) {
-					ConversationManager.beginConversation(player, npc.getTrait(NPGuy.class));
-					return;
-				}
-				if (!plugin.getConfig().getBoolean("conversation.use-scroll")) {
-					if (conversation.getNPC().getNPC().getId() == event.getNPC().getId()) {
-						conversation.changeResponse(false);
-					}
-					else {
-						ConversationManager.beginConversation(player, npc.getTrait(NPGuy.class));
-					}
-				}
-		}
-		
-		@SuppressWarnings("unused")
-		@EventHandler
-		public void onLeftClick(NPCLeftClickEvent event) {
-				Player player = event.getClicker();
-				NPC npc = event.getNPC();
-				if (!npc.hasTrait(NPGuy.class)) {
-					return;
-				}
-				Conversation conversation = ConversationManager.getConversationByCaller(player);
-				if (conversation != null) {
-					if (conversation.getNPC().getNPC().getId() == npc.getId()) {
-						conversation.continueConversation();
-					}
-				}
+			Player player = event.getClicker();
+			NPC npc = event.getNPC();
+			if (player.getLocation().distance(npc.getBukkitEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance"))
+				return;
+			
+			Conversation conversation = ConversationManager.getConversationByCaller(player);
+			if (conversation == null || conversation.getNPGuy().getNPC() != npc) {
+				ConversationManager.beginConversation(player, npc.getTrait(NPGuy.class));
+			}
 		}
 		
 		@SuppressWarnings("unused")
@@ -319,7 +265,7 @@ public class DialogueManager {
 		 public void onPlayerMove(PlayerMoveEvent event) {
 			Conversation conversation = ConversationManager.getConversationByCaller(event.getPlayer());
 			if (conversation != null) {
-				if (event.getPlayer().getLocation().distance(conversation.getNPC().getNPC().getBukkitEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
+				if (event.getPlayer().getLocation().distance(conversation.getNPGuy().getNPC().getBukkitEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
 					ConversationManager.endConversation(event.getPlayer());
 				}
 			}

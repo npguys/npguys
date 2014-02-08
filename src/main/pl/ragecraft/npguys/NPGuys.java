@@ -14,6 +14,7 @@ import pl.ragecraft.npguys.commands.NPGuyCommands;
 import pl.ragecraft.npguys.requirement.quest.FinishedQuest;
 import pl.ragecraft.npguys.requirement.quest.PerformedQuest;
 import pl.ragecraft.npguys.requirement.rpgitem.RequiredRPGItem;
+import pl.ragecraft.npguys.ui.impl.ScoreboardUI;
 
 public class NPGuys extends JavaPlugin {
 	private static NPGuys plugin = null;
@@ -30,6 +31,8 @@ public class NPGuys extends JavaPlugin {
 		
 		ElementManager.init(this);
 		DialogueManager.init(this);
+		
+		ElementManager.registerUI("SCOREBOARD", ScoreboardUI.class);
 		
 		ElementManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
 		ElementManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
