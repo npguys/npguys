@@ -38,7 +38,10 @@ public class BeginQuest extends Action {
 		if (data.length < 1) {
 			throw new InvalidCommandException("Quest UID missing!");
 		}
-		//TODO
+		if (data.length > 1) {
+			throw new InvalidCommandException("Too long command syntax!");
+		}
+		quest = data[0];
 	}
 
 	@Override

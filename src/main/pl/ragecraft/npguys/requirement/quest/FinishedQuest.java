@@ -38,7 +38,7 @@ public class FinishedQuest extends Requirement {
 		if (data.length < 1) {
 			throw new InvalidCommandException("Quest UID missing!");
 		}
-		if (data.length > 0) {
+		if (data.length > 1) {
 			throw new InvalidCommandException("Too long command syntax!");
 		}
 		quest = data[0];

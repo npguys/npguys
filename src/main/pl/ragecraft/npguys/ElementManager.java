@@ -55,7 +55,7 @@ public class ElementManager {
 			}
 		}
 		if (plugin.getServer().getPluginManager().isPluginEnabled("Quests")) {
-			Plugin questsPlugin = plugin.getServer().getPluginManager().getPlugin("Quester");
+			Plugin questsPlugin = plugin.getServer().getPluginManager().getPlugin("Quests");
 			if(questsPlugin instanceof Quests) {
 				questHandler = new QuestsHandler((Quests)questsPlugin);
 				return;

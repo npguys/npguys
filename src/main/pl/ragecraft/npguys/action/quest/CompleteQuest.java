@@ -37,7 +37,10 @@ public class CompleteQuest extends Action {
 		if (data.length < 1) {
 			throw new InvalidCommandException("Quest UID missing!");
 		}
-		// TODO Auto-generated method stub
+		if (data.length > 1) {
+			throw new InvalidCommandException("Too long command syntax!");
+		}
+		quest = data[0];
 	}
 
 	@Override
