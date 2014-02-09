@@ -29,7 +29,7 @@ public class QuestsHandler implements QuestHandler {
 			List<Integer> objectivesIDs) {
 		Quester quester = getQuester(player);
 		Quest currentQuest = getQuest(questName);
-		if(currentQuest.name.equalsIgnoreCase(questName) && !objectivesIDs.isEmpty()) {
+		if(currentQuest != null && currentQuest.name.equalsIgnoreCase(questName) && !objectivesIDs.isEmpty()) {
 			Collections.sort(objectivesIDs);
 			int lastObjectiveID = objectivesIDs.get(objectivesIDs.size()-1);
 			
@@ -43,7 +43,7 @@ public class QuestsHandler implements QuestHandler {
 	public void completeQuest(Player player, String questName) {
 		Quester quester = getQuester(player);
 		Quest currentQuest = quester.currentQuest;
-		if(currentQuest.name.equalsIgnoreCase(questName)) {
+		if(currentQuest != null && currentQuest.name.equalsIgnoreCase(questName)) {
 			currentQuest.completeQuest(quester);
 		} else {
 			/* We have to restore previous state or the current quest will be cancelled.
@@ -65,7 +65,7 @@ public class QuestsHandler implements QuestHandler {
 	public void cancelQuest(Player player, String questName) {
 		Quester quester = getQuester(player);
 		Quest currentQuest = quester.currentQuest;
-		if(currentQuest.name.equalsIgnoreCase(questName)) {
+		if(currentQuest != null && currentQuest.name.equalsIgnoreCase(questName)) {
 			currentQuest.failQuest(quester);
 		}
 	}
@@ -75,7 +75,7 @@ public class QuestsHandler implements QuestHandler {
 			List<Integer> objectivesIDs) {
 		Quester quester = getQuester(player);
 		Quest currentQuest = quester.currentQuest;
-		if(currentQuest.name.equalsIgnoreCase(questName)) {
+		if(currentQuest != null && currentQuest.name.equalsIgnoreCase(questName)) {
 			int currentStageIndex = quester.currentStageIndex;
 			for(Integer objectiveID : objectivesIDs) {
 				if(objectiveID.intValue() != currentStageIndex) {
@@ -95,7 +95,8 @@ public class QuestsHandler implements QuestHandler {
 
 	@Override
 	public boolean isPerforming(Player player, String questName) {
-		return getQuester(player).currentQuest.name.equalsIgnoreCase(questName);
+		Quest currentQuest = getQuester(player).currentQuest;
+		return (currentQuest != null && currentQuest.name.equalsIgnoreCase(questName));
 	}
 	
 	private Quester getQuester(Player player) {
