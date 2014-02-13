@@ -23,12 +23,16 @@ import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.ragecraft.npguys.action.AbandonConversation;
+import pl.ragecraft.npguys.action.GivePermission;
+import pl.ragecraft.npguys.action.RunCommand;
+import pl.ragecraft.npguys.action.TakePermission;
 import pl.ragecraft.npguys.action.quest.BeginQuest;
 import pl.ragecraft.npguys.action.quest.CompleteObjectives;
 import pl.ragecraft.npguys.action.quest.CompleteQuest;
 import pl.ragecraft.npguys.action.rpgitem.TakeRPGItem;
 import pl.ragecraft.npguys.action.rpgitem.GiveRPGItem;
 import pl.ragecraft.npguys.commands.NPGuyCommands;
+import pl.ragecraft.npguys.requirement.RequiredPermission;
 import pl.ragecraft.npguys.requirement.quest.FinishedQuest;
 import pl.ragecraft.npguys.requirement.quest.PerformedQuest;
 import pl.ragecraft.npguys.requirement.rpgitem.RequiredRPGItem;
@@ -52,6 +56,9 @@ public class NPGuys extends JavaPlugin {
 		
 		ElementManager.registerUI("SCOREBOARD", ScoreboardUI.class);
 		
+		ElementManager.registerAction("RUN_COMMAND", RunCommand.class);
+		ElementManager.registerAction("GIVE_PERMISSION", GivePermission.class);
+		ElementManager.registerAction("TAKE_PERMISSION", TakePermission.class);
 		ElementManager.registerAction("GIVE_RPGITEM", GiveRPGItem.class);
 		ElementManager.registerAction("TAKE_RPGITEM", TakeRPGItem.class);
 		ElementManager.registerAction("BEGIN_QUEST", BeginQuest.class);
@@ -59,6 +66,7 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
 		ElementManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
 		
+		ElementManager.registerRequirement("PERMISSION", RequiredPermission.class);
 		ElementManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
 		ElementManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
 		ElementManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);

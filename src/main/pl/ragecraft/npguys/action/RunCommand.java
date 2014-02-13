@@ -16,56 +16,49 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package pl.ragecraft.npguys.action.quest;
+package pl.ragecraft.npguys.action;
 
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.ElementManager;
-import pl.ragecraft.npguys.action.Action;
+import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
 
-
-public class BeginQuest extends Action {
-	public BeginQuest(String type) {
+public class RunCommand extends Action {
+	private String command;
+	
+	public RunCommand(String type) {
 		super(type);
 	}
 
-	private String quest;
-
 	@Override
 	public void perform(NPC npc, Player player) {
-		ElementManager.getQuestHandler().beginQuest(player, quest);
+		NPGuys.getPlugin().getServer().dispatchCommand(NPGuys.getPlugin().getServer().getConsoleSender(), command.replaceAll("%player", player.getName()));
 	}
 
 	@Override
 	public void load(ConfigurationSection data) throws FailedToLoadException {
-		if (data.contains("quest") && data.get("quest") instanceof String) {
-			quest = data.getString("quest");
+		if (data.contains("command") && data.get("command") instanceof String) {
+			command = data.getString("command");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Command missing!");
 		}
 	}
 
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
-		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+		if(data.length < 1) {
+			throw new InvalidCommandException("Command missing!");
+		} else {
+			command = "";
+			for(String str : data) {
+				command += (str + " ");
+			}
 		}
-		if (data.length > 1) {
-			throw new InvalidCommandException("Too long command syntax!");
-		}
-		quest = data[0];
-	}
-
-	@Override
-	public void save(ConfigurationSection data) {
-		super.save(data);
-		data.set("quest", quest);
 	}
 
 	@Override
@@ -82,6 +75,7 @@ public class BeginQuest extends Action {
 
 	@Override
 	public String getData() {
-		return quest;
+		return command;
 	}
+
 }

@@ -16,58 +16,58 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package pl.ragecraft.npguys.action.quest;
+package pl.ragecraft.npguys.action;
 
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import pl.ragecraft.npguys.ElementManager;
-import pl.ragecraft.npguys.action.Action;
+import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.exception.FailedToLoadException;
 import pl.ragecraft.npguys.exception.InvalidCommandException;
 
-
-public class BeginQuest extends Action {
-	public BeginQuest(String type) {
+public class GivePermission extends Action {
+	private String permission;
+	
+	public GivePermission(String type) {
 		super(type);
+		// TODO Auto-generated constructor stub
 	}
-
-	private String quest;
 
 	@Override
 	public void perform(NPC npc, Player player) {
-		ElementManager.getQuestHandler().beginQuest(player, quest);
+		player.addAttachment(NPGuys.getPlugin(), permission, true);
+		player.recalculatePermissions();
 	}
 
 	@Override
 	public void load(ConfigurationSection data) throws FailedToLoadException {
-		if (data.contains("quest") && data.get("quest") instanceof String) {
-			quest = data.getString("quest");
+		if (data.contains("permission") && data.get("permission") instanceof String) {
+			permission = data.getString("permission");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Permission missing!");
 		}
 	}
 
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
 		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+			throw new InvalidCommandException("Permission missing!");
 		}
 		if (data.length > 1) {
 			throw new InvalidCommandException("Too long command syntax!");
 		}
-		quest = data[0];
+		permission = data[0];
 	}
-
+	
 	@Override
 	public void save(ConfigurationSection data) {
 		super.save(data);
-		data.set("quest", quest);
+		data.set("permission", permission);
 	}
-
+	
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
@@ -82,6 +82,6 @@ public class BeginQuest extends Action {
 
 	@Override
 	public String getData() {
-		return quest;
+		return permission;
 	}
 }
