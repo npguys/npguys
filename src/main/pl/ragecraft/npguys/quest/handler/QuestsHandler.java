@@ -87,7 +87,24 @@ public class QuestsHandler implements QuestHandler {
 			currentQuest.failQuest(quester);
 		}
 	}
-
+	
+	@Override
+	public boolean hasCompletedObjectives(Player player, String questName,
+			List<Integer> objectivesIDs) {
+		Quester quester = getQuester(player);
+		Quest currentQuest = quester.currentQuest;
+		if(currentQuest != null && currentQuest.name.equalsIgnoreCase(questName)) {
+			int currentStageIndex = quester.currentStageIndex;
+			for(Integer objectiveID : objectivesIDs) {
+				if(objectiveID.intValue() > currentStageIndex) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public boolean hasActiveObjectives(Player player, String questName,
 			List<Integer> objectivesIDs) {

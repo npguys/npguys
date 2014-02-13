@@ -31,6 +31,8 @@ public interface QuestHandler {
 	
 	public void cancelQuest(Player player, String questName);
 	
+	public boolean hasCompletedObjectives(Player player, String questName, List<Integer> objectivesIDs);
+	
 	public boolean hasActiveObjectives(Player player, String questName, List<Integer> objectivesIDs);
 	
 	public boolean hasCompleted(Player player, String questName);

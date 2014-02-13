@@ -33,6 +33,8 @@ import pl.ragecraft.npguys.action.rpgitem.TakeRPGItem;
 import pl.ragecraft.npguys.action.rpgitem.GiveRPGItem;
 import pl.ragecraft.npguys.commands.NPGuyCommands;
 import pl.ragecraft.npguys.requirement.RequiredPermission;
+import pl.ragecraft.npguys.requirement.quest.ActiveObjectives;
+import pl.ragecraft.npguys.requirement.quest.CompletedObjectives;
 import pl.ragecraft.npguys.requirement.quest.FinishedQuest;
 import pl.ragecraft.npguys.requirement.quest.PerformedQuest;
 import pl.ragecraft.npguys.requirement.rpgitem.RequiredRPGItem;
@@ -70,6 +72,8 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerRequirement("REQUIRED_RPGITEM", RequiredRPGItem.class);
 		ElementManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
 		ElementManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
+		ElementManager.registerRequirement("ACTIVE_OBJECTIVES", ActiveObjectives.class);
+		ElementManager.registerRequirement("COMPLETED_OBJECTIVES", CompletedObjectives.class);
 		
 		//TODO Unsafe code
 		

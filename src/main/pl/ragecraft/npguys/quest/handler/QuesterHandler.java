@@ -28,6 +28,7 @@ import com.gmail.molnardad.quester.exceptions.QuesterException;
 import com.gmail.molnardad.quester.lang.QuesterLang;
 import com.gmail.molnardad.quester.profiles.PlayerProfile;
 import com.gmail.molnardad.quester.profiles.ProfileManager;
+import com.gmail.molnardad.quester.profiles.QuestProgress.ObjectiveStatus;
 import com.gmail.molnardad.quester.quests.QuestManager;
 
 import pl.ragecraft.npguys.NPGuys;
@@ -94,6 +95,25 @@ public class QuesterHandler implements QuestHandler {
 	}
 
 	@Override
+	public boolean hasCompletedObjectives(Player player, String questName,
+			List<Integer> objectivesIDs) {
+		if (isPerforming(player, questName)) {
+			try {
+				selectQuest(player, questName);
+			} catch (QuesterException e) {
+				e.printStackTrace();
+			}
+			for (int obj : objectivesIDs) {
+				if (getQuesterProfile(player).getProgress().getObjectiveStatus(obj) != ObjectiveStatus.COMPLETED) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean hasActiveObjectives(Player player, String questName,
 			List<Integer> objectivesIDs) {
 		if (isPerforming(player, questName)) {
@@ -107,8 +127,9 @@ public class QuesterHandler implements QuestHandler {
 					return false;
 				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
