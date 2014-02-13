@@ -68,10 +68,8 @@ public class Conversation {
 		
 		if(!finish) {
 			possibleResponses.addAll(npc.getPossibleResponses(displayedMessage.getNPCMessage(), player));
-			ui.openView();
-		} else {
-			ui.closeView();
 		}
+		ui.openView();
 	}
 	
 	public void changeResponse(int index) {

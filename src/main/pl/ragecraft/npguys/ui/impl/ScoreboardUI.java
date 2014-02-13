@@ -47,12 +47,12 @@ public class ScoreboardUI extends ConversationUI {
 	private static String npcMessageFormat;
 	
 	private boolean ignoreEvents;
-	private BukkitTask task;
+	private boolean closeView;
 	
 	public ScoreboardUI(Conversation conversation) {
 		super(conversation);
 		ignoreEvents = true;
-		task = null;
+		closeView = false;
 	}
 	
 	@Override
@@ -83,12 +83,12 @@ public class ScoreboardUI extends ConversationUI {
 		npcMsg = npcMsg.replace('&', '§');
 		final String final_npcMsg = npcMsg;
 		
-		task = Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
+		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
 			@Override
 			public void run() {
 				ignoreEvents = false;
 				conversation.getPlayer().sendMessage(final_npcMsg);
-				updateView();
+				if(!closeView) updateView();
 			}
 		}, npcDelay);
 	}
@@ -124,7 +124,7 @@ public class ScoreboardUI extends ConversationUI {
 
 	@Override
 	public void closeView() {
-		task.cancel();
+		closeView = true;
 		getConversation().getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 	}
 	
