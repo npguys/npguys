@@ -1,7 +1,7 @@
 conversation:
   distance: 5.0
 ui:
-  default: "scoreboard"
+  default: "SCOREBOARD"
   configs:
     scoreboard:
       headline: "Your answer"

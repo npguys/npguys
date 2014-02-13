@@ -61,7 +61,7 @@ public class ElementManager {
 		requirements = new HashMap<String, Class<? extends Requirement>>();
 		uiTypes = new HashMap<String, Class<? extends ConversationUI>>();
 		
-		defaultUI = null;
+		defaultUI = NPGuys.getPlugin().getConfig().getString("ui.default").toUpperCase();
 	}
 
 	private static void setupQuestHandler(NPGuys plugin) {
@@ -158,7 +158,6 @@ public class ElementManager {
 	}
 	
 	public static void registerUI(String name, Class<? extends ConversationUI> clazz) {
-		defaultUI = name;
 		uiTypes.put(name.toUpperCase(), clazz);
 		ConfigurationSection uiConfig = NPGuys.getPlugin().getConfig().getConfigurationSection("ui.configs."+name.toLowerCase());
 		try {
