@@ -22,14 +22,14 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.molnardad.quester.ActionSource;
-import com.gmail.molnardad.quester.Quester;
-import com.gmail.molnardad.quester.exceptions.QuesterException;
-import com.gmail.molnardad.quester.lang.QuesterLang;
-import com.gmail.molnardad.quester.profiles.PlayerProfile;
-import com.gmail.molnardad.quester.profiles.ProfileManager;
-import com.gmail.molnardad.quester.profiles.QuestProgress.ObjectiveStatus;
-import com.gmail.molnardad.quester.quests.QuestManager;
+import me.ragan262.quester.ActionSource;
+import me.ragan262.quester.Quester;
+import me.ragan262.quester.exceptions.QuesterException;
+import me.ragan262.quester.lang.QuesterLang;
+import me.ragan262.quester.profiles.PlayerProfile;
+import me.ragan262.quester.profiles.ProfileManager;
+import me.ragan262.quester.profiles.QuestProgress.ObjectiveStatus;
+import me.ragan262.quester.quests.QuestManager;
 
 import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.quest.QuestHandler;

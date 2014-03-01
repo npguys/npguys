@@ -265,7 +265,7 @@ public class DialogueManager {
 		public void onRightClick(NPCRightClickEvent event) {
 			Player player = event.getClicker();
 			NPC npc = event.getNPC();
-			if (player.getLocation().distance(npc.getBukkitEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance"))
+			if (player.getLocation().distance(npc.getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance"))
 				return;
 			
 			Conversation conversation = ConversationManager.getConversationByCaller(player);
@@ -279,7 +279,7 @@ public class DialogueManager {
 		 public void onPlayerMove(PlayerMoveEvent event) {
 			Conversation conversation = ConversationManager.getConversationByCaller(event.getPlayer());
 			if (conversation != null) {
-				if (event.getPlayer().getLocation().distance(conversation.getNPGuy().getNPC().getBukkitEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
+				if (event.getPlayer().getLocation().distance(conversation.getNPGuy().getNPC().getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
 					ConversationManager.endConversation(event.getPlayer());
 				}
 			}

@@ -27,6 +27,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -158,7 +160,8 @@ public class ScoreboardUI extends ConversationUI {
 			int newSlot = event.getNewSlot();
 			
 			Location playerLoc = conversation.getPlayer().getEyeLocation();
-			Location npcLoc = conversation.getNPGuy().getNPC().getBukkitEntity().getEyeLocation();
+			Entity npcEntity = conversation.getNPGuy().getNPC().getEntity();
+			Location npcLoc = (npcEntity instanceof LivingEntity ? ((LivingEntity)npcEntity).getEyeLocation() : npcEntity.getLocation());
 			// Checks if player looks at npc face (we don't want to talk to dirt)
 			Vector toCenter = new Vector(npcLoc.getX()-playerLoc.getX(), npcLoc.getY()-playerLoc.getY(), npcLoc.getZ()-playerLoc.getZ());
 			Vector direction = playerLoc.getDirection();
