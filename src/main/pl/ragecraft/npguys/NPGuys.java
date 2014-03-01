@@ -32,6 +32,8 @@ import pl.ragecraft.npguys.action.quest.CompleteQuest;
 import pl.ragecraft.npguys.action.rpgitem.TakeRPGItem;
 import pl.ragecraft.npguys.action.rpgitem.GiveRPGItem;
 import pl.ragecraft.npguys.commands.NPGuyCommands;
+import pl.ragecraft.npguys.commands.NPGuysCommands;
+import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.requirement.RequiredPermission;
 import pl.ragecraft.npguys.requirement.quest.ActiveObjectives;
 import pl.ragecraft.npguys.requirement.quest.CompletedObjectives;
@@ -78,6 +80,7 @@ public class NPGuys extends JavaPlugin {
 		//TODO Unsafe code
 		
 		getCommand("npguy").setExecutor(new NPGuyCommands());
+		getCommand("npguys").setExecutor(new NPGuysCommands());
 		
 		ElementManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));
 	}
@@ -89,6 +92,7 @@ public class NPGuys extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		DialogueManager.saveAll();
+		ConversationManager.endAll();
 	}
 	
 }

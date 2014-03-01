@@ -83,4 +83,11 @@ public class ConversationManager {
 			}
 		}
 	}
+
+
+	public static void endAll() {
+		for(Player player : conversations.keySet()) {
+			endConversation(player);
+		}
+	}
 }

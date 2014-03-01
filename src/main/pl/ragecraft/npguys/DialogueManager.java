@@ -53,7 +53,7 @@ import pl.ragecraft.npguys.requirement.Requirement;
 public class DialogueManager {
 	private static NPGuys plugin = null;
 	private static File npcs;
-	private static Map<String, NPGuyData> npguys = new HashMap<String, NPGuyData>();
+	private static Map<String, NPGuyData> npguys;
 	
 	public static void init(final NPGuys plugin) {
 		DialogueManager.plugin = plugin;
@@ -67,14 +67,20 @@ public class DialogueManager {
 
 			@Override
 			public void run() {
-				for (File npc : npcs.listFiles()) {
-					load(npc.getName().replaceAll(".yml", ""), YamlConfiguration.loadConfiguration(npc));
-				}
-				plugin.getLogger().log(Level.INFO, "Data loaded...");
+				reload();
 			}
 		}, 1);
 		
 		plugin.getServer().getPluginManager().registerEvents(new EventListener(), plugin);
+	}
+	
+	public static void reload() {
+		npguys = new HashMap<String, NPGuyData>();
+		
+		for (File npc : npcs.listFiles()) {
+			load(npc.getName().replaceAll(".yml", ""), YamlConfiguration.loadConfiguration(npc));
+		}
+		plugin.getLogger().log(Level.INFO, "Dialogues loaded.");
 	}
 	
 	private static void load(String npguy, YamlConfiguration data) {

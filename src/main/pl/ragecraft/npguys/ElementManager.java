@@ -54,12 +54,16 @@ public class ElementManager {
 	private static String defaultUI;
 	
 	public static void init(NPGuys plugin) {
-		setupCitizens(plugin);
-		setupQuestHandler(plugin);
+		reload(plugin);
 		
 		actions = new HashMap<String, Class<? extends Action>>();
 		requirements = new HashMap<String, Class<? extends Requirement>>();
 		uiTypes = new HashMap<String, Class<? extends ConversationUI>>();
+	}
+	
+	public static void reload(NPGuys plugin) {
+		setupCitizens(plugin);
+		setupQuestHandler(plugin);
 		
 		defaultUI = NPGuys.getPlugin().getConfig().getString("ui.default").toUpperCase();
 	}

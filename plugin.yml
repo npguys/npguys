@@ -1,5 +1,5 @@
 name: NPGuys
-version: "1.2.0 BETA (Dev #1)"
+version: "1.2.1 BETA"
 author: Goldob
 main: pl.ragecraft.npguys.NPGuys
 depend: [Citizens]
@@ -11,6 +11,9 @@ commands:
     aliases: [npg]
     permission: npguys.manage.commands
     ussage: "Unknown command! Type /npguy for command list!"
+  npguys:
+    description: "Plugin management commands"
+    permission: npguys.manage.commands
 
 permissions:
   npguys.*:
