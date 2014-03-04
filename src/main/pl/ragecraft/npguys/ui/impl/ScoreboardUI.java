@@ -75,9 +75,12 @@ public class ScoreboardUI extends ConversationUI {
 		playerMsg = playerMsg.replaceAll("%player", conversation.getPlayer().getName());
 		playerMsg = playerMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
 		playerMsg = playerMsg.replace('&', '§');
-		conversation.getPlayer().sendMessage(playerMsg);
+		if(!conversation.getDisplayedMessage().getMessage().equals("")) {
+			conversation.getPlayer().sendMessage(playerMsg);
+		}
 		
 		String npcMsg = npcMessageFormat;
+
 		npcMsg = npcMsg.replaceAll("%msg", conversation.getDisplayedMessage().getNPCMessage().getMessage());
 		npcMsg = npcMsg.replaceAll("%player", conversation.getPlayer().getName());
 		npcMsg = npcMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
@@ -88,7 +91,7 @@ public class ScoreboardUI extends ConversationUI {
 			@Override
 			public void run() {
 				ignoreEvents = false;
-				conversation.getPlayer().sendMessage(final_npcMsg);
+				if(!conversation.getDisplayedMessage().getNPCMessage().equals("")) conversation.getPlayer().sendMessage(final_npcMsg);
 				if(!closeView) updateView();
 			}
 		}, npcDelay);

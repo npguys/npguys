@@ -34,6 +34,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import pl.ragecraft.npguys.action.Action;
@@ -289,6 +290,12 @@ public class DialogueManager {
 					ConversationManager.endConversation(event.getPlayer());
 				}
 			}
+		}
+		
+		@SuppressWarnings("unused")
+		@EventHandler
+		 public void onPlayerChangeWorldEvent(PlayerChangedWorldEvent event) {
+			ConversationManager.endConversation(event.getPlayer());
 		}
 	}
 }

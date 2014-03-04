@@ -60,6 +60,12 @@ public class RunCommand extends Action {
 			}
 		}
 	}
+	
+	@Override
+	public void save(ConfigurationSection data) {
+		super.save(data);
+		data.set("command", command);
+	}
 
 	@Override
 	public String getDescription() {
