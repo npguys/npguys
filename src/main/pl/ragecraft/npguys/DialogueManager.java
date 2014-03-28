@@ -272,7 +272,7 @@ public class DialogueManager {
 		public void onRightClick(NPCRightClickEvent event) {
 			Player player = event.getClicker();
 			NPC npc = event.getNPC();
-			if (player.getLocation().distance(npc.getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance"))
+			if (player.getLocation().distance(npc.getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance") || !npc.hasTrait(NPGuy.class))
 				return;
 			
 			Conversation conversation = ConversationManager.getConversationByCaller(player);
