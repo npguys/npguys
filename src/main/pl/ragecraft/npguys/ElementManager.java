@@ -35,9 +35,7 @@ import pl.ragecraft.npguys.quest.handler.QuesterHandler;
 import pl.ragecraft.npguys.quest.handler.QuestsHandler;
 import pl.ragecraft.npguys.requirement.Requirement;
 import pl.ragecraft.npguys.ui.ConversationUI;
-
-import me.ragan262.quester.Quester;
-
+import com.gmail.molnardad.quester.Quester;
 import me.blackvein.quests.Quests;
 import net.citizensnpcs.api.CitizensPlugin;
 import net.milkbowl.vault.economy.Economy;
