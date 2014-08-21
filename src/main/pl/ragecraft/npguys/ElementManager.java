@@ -35,7 +35,11 @@ import pl.ragecraft.npguys.quest.handler.QuesterHandler;
 import pl.ragecraft.npguys.quest.handler.QuestsHandler;
 import pl.ragecraft.npguys.requirement.Requirement;
 import pl.ragecraft.npguys.ui.ConversationUI;
+
 import com.gmail.molnardad.quester.Quester;
+import com.herocraftonline.heroes.Heroes;
+import com.herocraftonline.heroes.characters.CharacterManager;
+
 import me.blackvein.quests.Quests;
 import net.citizensnpcs.api.CitizensPlugin;
 import net.milkbowl.vault.economy.Economy;
@@ -44,6 +48,7 @@ public class ElementManager {
 	private static Economy economy = null;
 	private static CitizensPlugin citizens = null;
 	private static QuestHandler questHandler = null;
+	private static CharacterManager heroesCharacterManager = null;
 	
 	private static Map<String, Class<? extends Action>> actions;
 	private static Map<String, Class<? extends Requirement>> requirements;
@@ -62,6 +67,7 @@ public class ElementManager {
 	public static void reload(NPGuys plugin) {
 		setupCitizens(plugin);
 		setupQuestHandler(plugin);
+		setupHeroes(plugin);
 		
 		defaultUI = NPGuys.getPlugin().getConfig().getString("ui.default").toUpperCase();
 	}
@@ -85,6 +91,12 @@ public class ElementManager {
 
 	private static void setupCitizens(NPGuys plugin) {
 		citizens = (CitizensPlugin)plugin.getServer().getPluginManager().getPlugin("Citizens");
+	}
+	
+	private static void setupHeroes(NPGuys plugin) {
+		if(plugin.getServer().getPluginManager().isPluginEnabled("Heroes")) {
+			heroesCharacterManager = Heroes.getInstance().getCharacterManager();
+		}
 	}
 	
 	public static Action newAction(String name) throws ActionMissingException {
@@ -153,6 +165,10 @@ public class ElementManager {
 	
 	public static QuestHandler getQuestHandler() {
 		return questHandler;
+	}
+	
+	public static CharacterManager getHeroesCharacterManager() {
+		return heroesCharacterManager;
 	}
 	
 	public static void setQuestHandler(QuestHandler questHandler) {

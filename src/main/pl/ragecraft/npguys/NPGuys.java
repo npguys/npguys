@@ -23,6 +23,7 @@ import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.ragecraft.npguys.action.AbandonConversation;
+import pl.ragecraft.npguys.action.ForceCommand;
 import pl.ragecraft.npguys.action.GivePermission;
 import pl.ragecraft.npguys.action.RunCommand;
 import pl.ragecraft.npguys.action.TakePermission;
@@ -32,7 +33,9 @@ import pl.ragecraft.npguys.action.quest.CompleteQuest;
 import pl.ragecraft.npguys.commands.NPGuyCommands;
 import pl.ragecraft.npguys.commands.NPGuysCommands;
 import pl.ragecraft.npguys.conversation.ConversationManager;
+import pl.ragecraft.npguys.requirement.MinimumLevel;
 import pl.ragecraft.npguys.requirement.RequiredPermission;
+import pl.ragecraft.npguys.requirement.heroes.RequiredHeroClass;
 import pl.ragecraft.npguys.requirement.quest.ActiveObjectives;
 import pl.ragecraft.npguys.requirement.quest.CompletedObjectives;
 import pl.ragecraft.npguys.requirement.quest.FinishedQuest;
@@ -58,6 +61,7 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerUI("SCOREBOARD", ScoreboardUI.class);
 		
 		ElementManager.registerAction("RUN_COMMAND", RunCommand.class);
+		ElementManager.registerAction("FORCE_COMMAND", ForceCommand.class);
 		ElementManager.registerAction("GIVE_PERMISSION", GivePermission.class);
 		ElementManager.registerAction("TAKE_PERMISSION", TakePermission.class);
 		ElementManager.registerAction("BEGIN_QUEST", BeginQuest.class);
@@ -70,8 +74,8 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
 		ElementManager.registerRequirement("ACTIVE_OBJECTIVES", ActiveObjectives.class);
 		ElementManager.registerRequirement("COMPLETED_OBJECTIVES", CompletedObjectives.class);
-		
-		//TODO Unsafe code
+		ElementManager.registerRequirement("MIN_LEVEL", MinimumLevel.class);
+		ElementManager.registerRequirement("HEROCLASS", RequiredHeroClass.class);
 		
 		getCommand("npguy").setExecutor(new NPGuyCommands());
 		getCommand("npguys").setExecutor(new NPGuysCommands());
