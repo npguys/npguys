@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.conversation.Conversation;
@@ -66,6 +67,7 @@ public class ElementManager {
 	
 	public static void reload(NPGuys plugin) {
 		setupCitizens(plugin);
+		setupEconomy(plugin);
 		setupQuestHandler(plugin);
 		setupHeroes(plugin);
 		
@@ -91,6 +93,16 @@ public class ElementManager {
 
 	private static void setupCitizens(NPGuys plugin) {
 		citizens = (CitizensPlugin)plugin.getServer().getPluginManager().getPlugin("Citizens");
+	}
+	
+	private static void setupEconomy(NPGuys plugin) {
+		if(plugin.getServer().getPluginManager().isPluginEnabled("Vault")) {
+			RegisteredServiceProvider<Economy> economyProvider = plugin.getServer()
+					.getServicesManager().getRegistration(Economy.class);
+	        if (economyProvider != null) {
+	            economy = economyProvider.getProvider();
+	        }
+		}
 	}
 	
 	private static void setupHeroes(NPGuys plugin) {
