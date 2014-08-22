@@ -19,8 +19,8 @@ public class RequiredHeroClass extends Requirement {
 
 	@Override
 	public boolean isMet(NPC npc, Player player) {
-		return ElementManager.getHeroesCharacterManager().getHero(player).getClass()
-				.getName() == className;
+		return ElementManager.getHeroesCharacterManager().getHero(player).getHeroClass()
+				.getName().equalsIgnoreCase(className);
 		}
 
 	@Override
