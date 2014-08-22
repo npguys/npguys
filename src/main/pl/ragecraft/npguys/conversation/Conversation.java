@@ -37,7 +37,6 @@ public class Conversation {
 	private boolean finish = false;
 	private PlayerMessage displayedMessage;
 	private List<PlayerMessage> possibleResponses;
-	private int choosenResponse;
 	
 	public Conversation(Player player, NPGuy npc) throws UIMissingException {
 		this.player = player;
@@ -46,35 +45,28 @@ public class Conversation {
 	}
 	
 	public void beginConversation() {
-		choosenResponse = 1;
-		possibleResponses = new ArrayList<PlayerMessage>();
-		possibleResponses.add(DialogueManager.getWelcomeMessage(npc.getUID()));
-		continueConversation();
+		continueConversation(DialogueManager.getWelcomeMessage(npc.getUID()));
 	}
 	
-	public void continueConversation() {	
-		for(Action action : possibleResponses.get(choosenResponse-1).getActions()) {
-			action.perform(npc.getNPC(), player);
-		}
-		
-		displayedMessage = possibleResponses.get(choosenResponse-1);
-		if (displayedMessage == null) {
+	public void continueConversation(PlayerMessage choosenResponse) {	
+		if (choosenResponse == null) {
 			ConversationManager.endConversation(player);
 			return;
 		}
 		
-		choosenResponse = 1;
+		displayedMessage = choosenResponse;
 		possibleResponses = new ArrayList<PlayerMessage>();
+		possibleResponses.addAll(npc.getPossibleResponses(displayedMessage.getNPCMessage(), player));
 		
-		if(!finish) {
-			possibleResponses.addAll(npc.getPossibleResponses(displayedMessage.getNPCMessage(), player));
+		ui.displayMessages();
+		
+		for(Action action : choosenResponse.getActions()) {
+			action.perform(npc.getNPC(), player);
 		}
-		ui.openView();
-	}
-	
-	public void changeResponse(int index) {
-		choosenResponse = Math.min(possibleResponses.size(), Math.max(1, index));
-		ui.updateView();
+		
+		if (!finish) {
+			ui.scheduleChoiceViewOpening();
+		}
 	}
 	
 	public NPGuy getNPGuy() {
@@ -93,15 +85,12 @@ public class Conversation {
 		return possibleResponses;
 	}
 	
-	public int getChoosenResponse() {
-		return choosenResponse;
-	}
-	
 	public ConversationUI getUI() {
 		return ui;
 	}
 	
 	protected void end() {
+		ui.closeChoiceView();
 		finish = true;
 	}
 }

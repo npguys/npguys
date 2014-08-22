@@ -2,14 +2,15 @@ conversation:
   distance: 5.0
 ui:
   default: "SCOREBOARD"
+  npc:
+    message_format: "&9[&6NPGuys&9] %npc: &r%msg"
+    delay: 20
+  player:
+    message_format: "&9[&6NPGuys&9] %player: &r%msg"
   configs:
     scoreboard:
       headline: "Your answer"
-      npc:
-        message_format: "&9[&6NPGuys&9] %npc: &r%msg"
-        delay: 20
-      player:
-        message_format: "&9[&6NPGuys&9] %player: &r%msg"
+      use-scrollback: false
 dialogues:
   default:
     shortcut: "default"

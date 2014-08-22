@@ -20,19 +20,28 @@ package pl.ragecraft.npguys.ui;
 
 import net.citizensnpcs.api.npc.NPC;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.conversation.Conversation;
 
 public abstract class ConversationUI implements Listener {
 	private Conversation conversation;
+	private static long npcDelay;
+	private static String playerMessageFormat;
+	private static String npcMessageFormat;
 	
-	/* This will be called only once per each registered UI type.
-	 * It should save any values it needs in a static way.
-	 */
-	public abstract void init(ConfigurationSection config);
+	// This will be called only once per each registered UI type.
+	 // It should save any values it needs in a static way.
+	public void init(ConfigurationSection config) {
+		ConfigurationSection generalConfig = NPGuys.getPlugin().getConfig().getConfigurationSection("ui");
+		npcDelay = generalConfig.getLong("npc.delay");
+		playerMessageFormat = generalConfig.getString("player.message_format");
+		npcMessageFormat = generalConfig.getString("npc.message_format");
+	}
 	
 	// Be aware that conversation may be null if constructor is called only for UI type
 	// initialization
@@ -41,13 +50,48 @@ public abstract class ConversationUI implements Listener {
 	}
 	
 	// Called at the conversation start and when player picks next dialogue line
-	public abstract void openView();
+	public final void displayMessages() {
+		final Conversation conversation = getConversation();
+		String playerMsg = playerMessageFormat;
+		playerMsg = playerMsg.replaceAll("%msg", conversation.getDisplayedMessage().getMessage());
+		playerMsg = playerMsg.replaceAll("%player", conversation.getPlayer().getName());
+		playerMsg = playerMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
+		playerMsg = playerMsg.replace('&', '§');
+		if(!conversation.getDisplayedMessage().getMessage().equals("")) {
+			conversation.getPlayer().sendMessage(playerMsg);
+		}
+		
+		String npcMsg = npcMessageFormat;
+
+		npcMsg = npcMsg.replaceAll("%msg", conversation.getDisplayedMessage().getNPCMessage().getMessage());
+		npcMsg = npcMsg.replaceAll("%player", conversation.getPlayer().getName());
+		npcMsg = npcMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
+		npcMsg = npcMsg.replace('&', '§');
+		final String final_npcMsg = npcMsg;
+		
+		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				if(!conversation.getDisplayedMessage().getNPCMessage().equals(""))
+					conversation.getPlayer().sendMessage(final_npcMsg);
+			}
+		}, npcDelay);
+	}
 	
-	// Called every time the choosen response changes
-	public abstract void updateView();
+	public final void scheduleChoiceViewOpening() {
+		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				openChoiceView();
+			}
+		}, npcDelay);
+	}
+	
+	// After the method is called, the player should be able to choose his response
+	public abstract void openChoiceView();
 	
 	// Called when the conversation ends
-	public abstract void closeView();
+	public abstract void closeChoiceView();
 	
 	protected final Conversation getConversation() {
 		return conversation;

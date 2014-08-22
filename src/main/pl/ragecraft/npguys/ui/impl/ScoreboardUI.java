@@ -35,7 +35,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
-import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
 import pl.ragecraft.npguys.ui.ConversationUI;
@@ -43,62 +42,27 @@ import pl.ragecraft.npguys.ui.ConversationUI;
 public class ScoreboardUI extends ConversationUI {
 	private static String headline;
 	private static boolean useScrollback;
-	private static long npcDelay;
-	private static String playerMessageFormat;
-	private static String npcMessageFormat;
 	
 	private boolean ignoreEvents;
-	private boolean closeView;
+	
+	private int choosenResponseIndex = 0;
 	
 	public ScoreboardUI(Conversation conversation) {
 		super(conversation);
 		ignoreEvents = true;
-		closeView = false;
 	}
 	
 	@Override
 	public void init(ConfigurationSection config) {
+		super.init(config);
 		headline = config.getString("headline");
 		useScrollback = config.getBoolean("use-scrollback");
-		npcDelay = config.getLong("npc.delay");
-		playerMessageFormat = config.getString("player.message_format");
-		npcMessageFormat = config.getString("npc.message_format");
 	}
 	
 	@Override
-	public void openView() {
-		ignoreEvents = true;
+	public void openChoiceView() {
+		ignoreEvents = false;
 		
-		final Conversation conversation = getConversation();
-		String playerMsg = playerMessageFormat;
-		playerMsg = playerMsg.replaceAll("%msg", conversation.getDisplayedMessage().getMessage());
-		playerMsg = playerMsg.replaceAll("%player", conversation.getPlayer().getName());
-		playerMsg = playerMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
-		playerMsg = playerMsg.replace('&', '§');
-		if(!conversation.getDisplayedMessage().getMessage().equals("")) {
-			conversation.getPlayer().sendMessage(playerMsg);
-		}
-		
-		String npcMsg = npcMessageFormat;
-
-		npcMsg = npcMsg.replaceAll("%msg", conversation.getDisplayedMessage().getNPCMessage().getMessage());
-		npcMsg = npcMsg.replaceAll("%player", conversation.getPlayer().getName());
-		npcMsg = npcMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
-		npcMsg = npcMsg.replace('&', '§');
-		final String final_npcMsg = npcMsg;
-		
-		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
-			@Override
-			public void run() {
-				ignoreEvents = false;
-				if(!conversation.getDisplayedMessage().getNPCMessage().equals("")) conversation.getPlayer().sendMessage(final_npcMsg);
-				if(!closeView) updateView();
-			}
-		}, npcDelay);
-	}
-	
-	@Override
-	public void updateView() {
 		Scoreboard view = Bukkit.getScoreboardManager().getNewScoreboard();
 		Conversation conversation = getConversation();
 		view.registerNewObjective(ChatColor.UNDERLINE+headline, "dummy").setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -108,7 +72,7 @@ public class ScoreboardUI extends ConversationUI {
 		
 		for(PlayerMessage response : possibleResponses) {
 			StringBuilder line = new StringBuilder();
-			if(possibleResponses.size()-id+1 == conversation.getChoosenResponse()) {
+			if(possibleResponses.size()-id == choosenResponseIndex) {
 				line.append(" > ");
 			}
 			else {
@@ -120,36 +84,34 @@ public class ScoreboardUI extends ConversationUI {
 			else {
 				line.append(response.getShortcut().substring(0, 13));
 			}
-			view.getObjective(DisplaySlot.SIDEBAR).getScore(Bukkit.getOfflinePlayer(line.toString())).setScore(id);
+			view.getObjective(DisplaySlot.SIDEBAR).getScore(line.toString()).setScore(id);
 			id--;
 		}
 		conversation.getPlayer().setScoreboard(view);
 	}
 
 	@Override
-	public void closeView() {
-		closeView = true;
+	public void closeChoiceView() {
 		getConversation().getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 	}
 	
-	private void changeResponse(boolean reversed) {
+	private void changeResponse(boolean increment) {
 		Conversation conversation = getConversation();
-		int choosenResponse = conversation.getChoosenResponse();
-		if (!reversed) {
-			if (choosenResponse < conversation.getPossibleResponses().size()) {
-				choosenResponse++;
+		if (increment) {
+			if (choosenResponseIndex < conversation.getPossibleResponses().size()-1) {
+				choosenResponseIndex++;
 			} else {
-				choosenResponse = 1;
+				choosenResponseIndex = 0;
 			}
 		}
 		else {
-			if (choosenResponse > 1) {
-				choosenResponse--;
+			if (choosenResponseIndex > 0) {
+				choosenResponseIndex--;
 			} else {
-				choosenResponse = conversation.getPossibleResponses().size();
+				choosenResponseIndex = conversation.getPossibleResponses().size()-1;
 			}
 		}
-		conversation.changeResponse(choosenResponse);
+		openChoiceView();
 	}
 	
 	@EventHandler
@@ -165,15 +127,16 @@ public class ScoreboardUI extends ConversationUI {
 			Location playerLoc = conversation.getPlayer().getEyeLocation();
 			Entity npcEntity = conversation.getNPGuy().getNPC().getEntity();
 			Location npcLoc = (npcEntity instanceof LivingEntity ? ((LivingEntity)npcEntity).getEyeLocation() : npcEntity.getLocation());
+			
 			// Checks if player looks at npc face (we don't want to talk to dirt)
 			Vector toCenter = new Vector(npcLoc.getX()-playerLoc.getX(), npcLoc.getY()-playerLoc.getY(), npcLoc.getZ()-playerLoc.getZ());
 			Vector direction = playerLoc.getDirection();
 			if (direction.angle(toCenter) < Math.atan(0.5/playerLoc.distance(npcLoc))) {
 				if (newSlot == oldSlot+1 || (newSlot == 0 && oldSlot == 8)) {
-					changeResponse(false);
+					changeResponse(true);
 				}
 				if (newSlot == oldSlot-1 || (newSlot == 8 && oldSlot == 0)) {
-					changeResponse(true);
+					changeResponse(false);
 				}
 				event.setCancelled(true);
 			}
@@ -185,7 +148,7 @@ public class ScoreboardUI extends ConversationUI {
 		if(ignoreEvents || !checkPlayer(event.getClicker()) || !checkNPC(event.getNPC())) 
 			return;
 		
-		changeResponse(false);
+		changeResponse(true);
 		event.setCancelled(true);
 	}
 	
@@ -194,7 +157,11 @@ public class ScoreboardUI extends ConversationUI {
 		if(ignoreEvents || !checkPlayer(event.getClicker()) || !checkNPC(event.getNPC()))
 			return;
 		
-		getConversation().continueConversation();
+		getConversation().continueConversation(getConversation().getPossibleResponses()
+				.get(choosenResponseIndex));
 		event.setCancelled(true);
+		
+		ignoreEvents = true;
+		choosenResponseIndex = 0;
 	}
 }
