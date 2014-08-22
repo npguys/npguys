@@ -39,6 +39,7 @@ public class ConversationManager {
 	private static HashMap<Player, Conversation> conversations = new HashMap<Player, Conversation>();
 	
 	public static void init(final NPGuys plugin) {
+		ConversationManager.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(new EventListener(), plugin);
 	}
 	
