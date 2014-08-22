@@ -65,14 +65,11 @@ public class DialogueManager {
 		}
 		
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
 			@Override
 			public void run() {
 				reload();
 			}
 		}, 1);
-		
-		plugin.getServer().getPluginManager().registerEvents(new EventListener(), plugin);
 	}
 	
 	public static void reload() {
@@ -264,38 +261,5 @@ public class DialogueManager {
 		List<String> possibleResponses = new ArrayList<String>();
 		NPCMessage response = new NPCMessage(plugin.getConfig().getString("dialogues.exit.npc_response.message"), possibleResponses);
 		return new PlayerMessage(plugin.getConfig().getString("dialogues.exit.shortcut"), plugin.getConfig().getString("dialogues.exit.message"), response, requirements, actions);
-	}
-	
-	private static class EventListener implements Listener {
-		@SuppressWarnings("unused")
-		@EventHandler
-		public void onRightClick(NPCRightClickEvent event) {
-			Player player = event.getClicker();
-			NPC npc = event.getNPC();
-			if (player.getLocation().distance(npc.getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance") || !npc.hasTrait(NPGuy.class))
-				return;
-			
-			Conversation conversation = ConversationManager.getConversationByCaller(player);
-			if (conversation == null || conversation.getNPGuy().getNPC() != npc) {
-				ConversationManager.beginConversation(player, npc.getTrait(NPGuy.class));
-			}
-		}
-		
-		@SuppressWarnings("unused")
-		@EventHandler
-		 public void onPlayerMove(PlayerMoveEvent event) {
-			Conversation conversation = ConversationManager.getConversationByCaller(event.getPlayer());
-			if (conversation != null) {
-				if (event.getPlayer().getLocation().distance(conversation.getNPGuy().getNPC().getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
-					ConversationManager.endConversation(event.getPlayer());
-				}
-			}
-		}
-		
-		@SuppressWarnings("unused")
-		@EventHandler
-		 public void onPlayerChangeWorldEvent(PlayerChangedWorldEvent event) {
-			ConversationManager.endConversation(event.getPlayer());
-		}
 	}
 }

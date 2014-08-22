@@ -40,6 +40,7 @@ import pl.ragecraft.npguys.requirement.quest.ActiveObjectives;
 import pl.ragecraft.npguys.requirement.quest.CompletedObjectives;
 import pl.ragecraft.npguys.requirement.quest.FinishedQuest;
 import pl.ragecraft.npguys.requirement.quest.PerformedQuest;
+import pl.ragecraft.npguys.requirement.vault.MinimumMoney;
 import pl.ragecraft.npguys.ui.impl.ScoreboardUI;
 
 public class NPGuys extends JavaPlugin {
@@ -57,6 +58,7 @@ public class NPGuys extends JavaPlugin {
 		
 		ElementManager.init(this);
 		DialogueManager.init(this);
+		ConversationManager.init(this);
 		
 		ElementManager.registerUI("SCOREBOARD", ScoreboardUI.class);
 		
@@ -66,16 +68,17 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerAction("TAKE_PERMISSION", TakePermission.class);
 		ElementManager.registerAction("BEGIN_QUEST", BeginQuest.class);
 		ElementManager.registerAction("FINISH_QUEST", CompleteQuest.class);
-		ElementManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);
+		ElementManager.registerAction("COMPLETE_OBJECTIVES", CompleteObjectives.class);	
 		ElementManager.registerAction("ABANDON_CONVERSATION", AbandonConversation.class);
 		
 		ElementManager.registerRequirement("PERMISSION", RequiredPermission.class);
+		ElementManager.registerRequirement("MIN_LEVEL", MinimumLevel.class);
 		ElementManager.registerRequirement("PERFORMED_QUEST", PerformedQuest.class);
 		ElementManager.registerRequirement("FINISHED_QUEST", FinishedQuest.class);
 		ElementManager.registerRequirement("ACTIVE_OBJECTIVES", ActiveObjectives.class);
 		ElementManager.registerRequirement("COMPLETED_OBJECTIVES", CompletedObjectives.class);
-		ElementManager.registerRequirement("MIN_LEVEL", MinimumLevel.class);
 		ElementManager.registerRequirement("HEROCLASS", RequiredHeroClass.class);
+		ElementManager.registerRequirement("MIN_MONEY", MinimumMoney.class);
 		
 		getCommand("npguy").setExecutor(new NPGuyCommands());
 		getCommand("npguys").setExecutor(new NPGuysCommands());

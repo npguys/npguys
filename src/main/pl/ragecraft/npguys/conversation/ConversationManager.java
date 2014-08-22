@@ -20,18 +20,28 @@ package pl.ragecraft.npguys.conversation;
 
 import java.util.HashMap;
 
+import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import pl.ragecraft.npguys.NPGuy;
 import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.exception.UIMissingException;
 
 public class ConversationManager {
+	private static NPGuys plugin = null;
 	private static HashMap<Player, Conversation> conversations = new HashMap<Player, Conversation>();
-
+	
+	public static void init(final NPGuys plugin) {
+		plugin.getServer().getPluginManager().registerEvents(new EventListener(), plugin);
+	}
+	
 	public static void endConversation(Player caller, NPC npc) {
 		Conversation conversation = conversations.get(caller);
 		if(conversation.getNPGuy() != npc) {
@@ -88,6 +98,38 @@ public class ConversationManager {
 	public static void endAll() {
 		for(Player player : conversations.keySet()) {
 			endConversation(player);
+		}
+	}
+	
+	private static class EventListener implements Listener {
+		@EventHandler
+		public void onRightClick(NPCRightClickEvent event) {
+			Player player = event.getClicker();
+			NPC npc = event.getNPC();
+			if (player.getLocation().distance(npc.getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance") 
+					|| !npc.hasTrait(NPGuy.class))
+				return;
+			
+			Conversation conversation = getConversationByCaller(player);
+			if (conversation == null || conversation.getNPGuy().getNPC() != npc) {
+				beginConversation(player, npc.getTrait(NPGuy.class));
+			}
+		}
+		
+		@EventHandler
+		 public void onPlayerMove(PlayerMoveEvent event) {
+			Conversation conversation = ConversationManager.getConversationByCaller(event.getPlayer());
+			if (conversation != null) {
+				if (event.getPlayer().getLocation().distance(conversation.getNPGuy()
+						.getNPC().getEntity().getLocation()) > plugin.getConfig().getDouble("conversation.distance")) {
+					endConversation(event.getPlayer());
+				}
+			}
+		}
+		
+		@EventHandler
+		 public void onPlayerChangeWorldEvent(PlayerChangedWorldEvent event) {
+			endConversation(event.getPlayer());
 		}
 	}
 }
