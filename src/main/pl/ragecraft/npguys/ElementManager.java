@@ -195,15 +195,12 @@ public class ElementManager {
 		} catch (UIMissingException e) {
 			e.printStackTrace();
 		}
+		// TODO Catch UIInitializationFailedException
 	}
 	
-	public static ConversationUI newUI(String uiName, Conversation conversation) throws UIMissingException {
+	public static ConversationUI newUI(Class<? extends ConversationUI> clazz, Conversation conversation) {
 		try {
-			if (uiTypes.containsKey(uiName)) {
-				return uiTypes.get(uiName).getConstructor(Conversation.class).newInstance(conversation);
-			} else {
-				throw new UIMissingException(uiName);
-			}
+			return clazz.getConstructor(Conversation.class).newInstance(conversation);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -217,7 +214,16 @@ public class ElementManager {
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
+		// TODO FailedToCreateUIException or similar
 		return null;
+	}
+	
+	public static ConversationUI newUI(String uiName, Conversation conversation) throws UIMissingException {
+		if (uiTypes.containsKey(uiName)) {
+			return newUI(uiTypes.get(uiName), conversation);
+		} else {
+			throw new UIMissingException(uiName);
+		}
 	}
 	
 	public static ConversationUI newUI(Conversation conversation) throws UIMissingException {
