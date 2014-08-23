@@ -39,7 +39,7 @@ import pl.ragecraft.npguys.quest.handler.QuestsHandler;
 import pl.ragecraft.npguys.requirement.Requirement;
 import pl.ragecraft.npguys.ui.ConversationUI;
 
-import com.gmail.molnardad.quester.Quester;
+import me.ragan262.quester.Quester;
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.CharacterManager;
 

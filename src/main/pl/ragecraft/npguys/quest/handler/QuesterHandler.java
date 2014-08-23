@@ -22,12 +22,16 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.molnardad.quester.PlayerProfile;
-import com.gmail.molnardad.quester.Quest;
-import com.gmail.molnardad.quester.QuestManager;
-import com.gmail.molnardad.quester.Quester;
-import com.gmail.molnardad.quester.exceptions.QuesterException;
-
+import me.ragan262.quester.ActionSource;
+import me.ragan262.quester.Quester;
+import me.ragan262.quester.exceptions.QuesterException;
+import me.ragan262.quester.lang.QuesterLang;
+import me.ragan262.quester.profiles.PlayerProfile;
+import me.ragan262.quester.profiles.ProfileManager;
+import me.ragan262.quester.profiles.QuestProgress.ObjectiveStatus;
+import me.ragan262.quester.quests.Quest;
+import me.ragan262.quester.quests.QuestManager;
+import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.quest.QuestHandler;
 
 public class QuesterHandler implements QuestHandler {
@@ -40,7 +44,7 @@ public class QuesterHandler implements QuestHandler {
 	@Override
 	public void beginQuest(Player player, String questName) {
 		try {
-			getQuestManager().startQuest(player, questName, false);
+			getProfileManager().startQuest(player, getQuest(questName), ActionSource.otherSource(NPGuys.getPlugin()), getLang(player));
 		} catch (QuesterException e) {
 			e.printStackTrace();
 		}
@@ -52,16 +56,15 @@ public class QuesterHandler implements QuestHandler {
 		if (isPerforming(player, questName)) {
 			try {
 				selectQuest(player, questName);
-				Quest quest = getQuestManager().getQuest(questName);
-				for (int i : objectivesIDs) {
-					if (getQuestManager().isObjectiveActive(player, i)) {
-						if (quest.getObjective(i).getType().equalsIgnoreCase("CUSTOM")) {
-							getQuestManager().incProgress(player, i);
-						}
-					}
-				}
 			} catch (QuesterException e) {
 				e.printStackTrace();
+			}
+			for (int i : objectivesIDs) {
+				if (getProfileManager().isObjectiveActive(getQuesterProfile(player), i)) {
+					if (getQuestManager().getQuest(questName).getObjective(i).getType().equalsIgnoreCase("CUSTOM")) {
+						getProfileManager().incProgress(player, ActionSource.otherSource(NPGuys.getPlugin()), i);
+					}
+				}
 			}
 		}
 	}
@@ -71,7 +74,7 @@ public class QuesterHandler implements QuestHandler {
 		if (isPerforming(player, questName)) {
 			try {
 				selectQuest(player, questName);
-				getQuestManager().completeQuest(player);
+				getProfileManager().completeQuest(player, ActionSource.otherSource(NPGuys.getPlugin()), getLang(player));
 			} catch (QuesterException e) {
 				e.printStackTrace();
 			}
@@ -83,7 +86,7 @@ public class QuesterHandler implements QuestHandler {
 		if(isPerforming(player, questName)) {
 			try {
 				selectQuest(player, questName);
-				getQuestManager().cancelQuest(player, false);
+				quester.getProfileManager().cancelQuest(player, ActionSource.otherSource(NPGuys.getPlugin()), getLang(player));
 			} catch (QuesterException e) {
 				e.printStackTrace();
 			}
@@ -97,19 +100,15 @@ public class QuesterHandler implements QuestHandler {
 		if (isPerforming(player, questName)) {
 			try {
 				selectQuest(player, questName);
-				Quest quest = getQuestManager().getQuest(questName);
-				List<Integer> objectivesProgress = getQuesterProfile(player).getProgress();
-				for (int obj : objectivesIDs) {
-					if (objectivesProgress.get(obj) < quest.getObjective(obj).getTargetAmount()) {
-						return false;
-					}
-				}
-				return true;
 			} catch (QuesterException e) {
 				e.printStackTrace();
-			} catch (IndexOutOfBoundsException e) {
-				e.printStackTrace();
 			}
+			for (int obj : objectivesIDs) {
+				if (getQuesterProfile(player).getProgress().getObjectiveStatus(obj) != ObjectiveStatus.COMPLETED) {
+					return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	}
@@ -124,7 +123,7 @@ public class QuesterHandler implements QuestHandler {
 				e.printStackTrace();
 			}
 			for (int obj : objectivesIDs) {
-				if (!getQuestManager().isObjectiveActive(player, obj)) {
+				if (!getProfileManager().isObjectiveActive(getQuesterProfile(player), obj)) {
 					return false;
 				}
 			}
@@ -144,15 +143,25 @@ public class QuesterHandler implements QuestHandler {
 	}
 	
 	private void selectQuest(Player player, String quest) throws QuesterException {
-		getQuestManager().selectQuest(player.getName(), getQuestManager().getQuest(quest).getID());
+		getProfileManager().selectQuest(getQuesterProfile(player), getQuestManager().getQuest(quest));
 	}
 	
 	private PlayerProfile getQuesterProfile(Player player) {
-		return getQuestManager().getProfile(player.getName());
+		return quester.getProfileManager().getProfile(player);
+	}
+	private Quest getQuest(String questName) {
+		return quester.getQuestManager().getQuest(questName);
 	}
 	
-	@SuppressWarnings("static-access")
 	private QuestManager getQuestManager() {
-		return quester.qMan;
+		return quester.getQuestManager();
+	}
+	
+	private ProfileManager getProfileManager() {
+		return quester.getProfileManager();
+	}
+	
+	private QuesterLang getLang(Player player) {
+		return quester.getLanguageManager().getDefaultLang();
 	}
 }
