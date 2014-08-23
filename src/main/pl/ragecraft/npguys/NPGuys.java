@@ -41,6 +41,7 @@ import pl.ragecraft.npguys.requirement.quest.CompletedObjectives;
 import pl.ragecraft.npguys.requirement.quest.FinishedQuest;
 import pl.ragecraft.npguys.requirement.quest.PerformedQuest;
 import pl.ragecraft.npguys.requirement.vault.MinimumMoney;
+import pl.ragecraft.npguys.ui.impl.BossUI;
 import pl.ragecraft.npguys.ui.impl.ScoreboardUI;
 
 public class NPGuys extends JavaPlugin {
@@ -61,6 +62,7 @@ public class NPGuys extends JavaPlugin {
 		ConversationManager.init(this);
 		
 		ElementManager.registerUI("SCOREBOARD", ScoreboardUI.class);
+		ElementManager.registerUI("BOSS_HEALTHBAR", BossUI.class);
 		
 		ElementManager.registerAction("RUN_COMMAND", RunCommand.class);
 		ElementManager.registerAction("FORCE_COMMAND", ForceCommand.class);
