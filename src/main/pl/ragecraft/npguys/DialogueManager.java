@@ -26,20 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import pl.ragecraft.npguys.action.Action;
-import pl.ragecraft.npguys.conversation.Conversation;
-import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
 import pl.ragecraft.npguys.exception.ActionMissingException;
