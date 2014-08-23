@@ -28,6 +28,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
+import pl.ragecraft.npguys.exception.UIInitializationFailedException;
 import pl.ragecraft.npguys.ui.ClassicControlsUI;
 
 public class ScoreboardUI extends ClassicControlsUI {
@@ -38,7 +39,7 @@ public class ScoreboardUI extends ClassicControlsUI {
 	}
 	
 	@Override
-	public void init(ConfigurationSection config) {
+	public void init(ConfigurationSection config) throws UIInitializationFailedException {
 		super.init(config);
 		headline = config.getString("headline");
 	}

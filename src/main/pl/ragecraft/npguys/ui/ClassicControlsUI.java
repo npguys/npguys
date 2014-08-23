@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.util.Vector;
 
 import pl.ragecraft.npguys.conversation.Conversation;
+import pl.ragecraft.npguys.exception.UIInitializationFailedException;
 
 public abstract class ClassicControlsUI extends ConversationUI {
 	private boolean ignoreEvents;
@@ -26,7 +27,7 @@ public abstract class ClassicControlsUI extends ConversationUI {
 	}
 	
 	@Override
-	public void init(ConfigurationSection config) {
+	public void init(ConfigurationSection config) throws UIInitializationFailedException {
 		super.init(config);
 		useScrollback = config.getBoolean("use-scrollback");
 	}

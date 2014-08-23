@@ -21,6 +21,7 @@ package pl.ragecraft.npguys;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
@@ -30,6 +31,7 @@ import pl.ragecraft.npguys.action.Action;
 import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.exception.ActionMissingException;
 import pl.ragecraft.npguys.exception.RequirementMissingException;
+import pl.ragecraft.npguys.exception.UIInitializationFailedException;
 import pl.ragecraft.npguys.exception.UIMissingException;
 import pl.ragecraft.npguys.quest.QuestHandler;
 import pl.ragecraft.npguys.quest.handler.QuesterHandler;
@@ -191,11 +193,13 @@ public class ElementManager {
 		uiTypes.put(name.toUpperCase(), clazz);
 		ConfigurationSection uiConfig = NPGuys.getPlugin().getConfig().getConfigurationSection("ui.configs."+name.toLowerCase());
 		try {
-			newUI(null).init(uiConfig);
+			newUI(name, null).init(uiConfig);
 		} catch (UIMissingException e) {
 			e.printStackTrace();
+		} catch (UIInitializationFailedException e) {
+			NPGuys.getPlugin().getLogger()
+			.log(Level.WARNING, "Failed to initialize "+name+" UI: "+e.getMessage());
 		}
-		// TODO Catch UIInitializationFailedException
 	}
 	
 	public static ConversationUI newUI(Class<? extends ConversationUI> clazz, Conversation conversation) {

@@ -11,6 +11,8 @@ ui:
     scoreboard:
       headline: "Your answer"
       use-scrollback: false
+    boss_healthbar:
+      use-scrollback: false
 dialogues:
   default:
     shortcut: "default"

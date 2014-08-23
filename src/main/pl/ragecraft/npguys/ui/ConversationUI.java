@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 
 import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.conversation.Conversation;
+import pl.ragecraft.npguys.exception.UIInitializationFailedException;
 
 public abstract class ConversationUI implements Listener {
 	private Conversation conversation;
@@ -36,7 +37,7 @@ public abstract class ConversationUI implements Listener {
 	
 	// This will be called only once per each registered UI type.
 	 // It should save any values it needs in a static way.
-	public void init(ConfigurationSection config) {
+	public void init(ConfigurationSection config) throws UIInitializationFailedException {
 		ConfigurationSection generalConfig = NPGuys.getPlugin().getConfig().getConfigurationSection("ui");
 		npcDelay = generalConfig.getLong("npc.delay");
 		playerMessageFormat = generalConfig.getString("player.message_format");
