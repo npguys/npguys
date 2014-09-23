@@ -26,6 +26,7 @@ import net.citizensnpcs.api.util.DataKey;
 
 import org.bukkit.entity.Player;
 
+import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
@@ -35,9 +36,11 @@ import pl.ragecraft.npguys.requirement.Requirement;
 
 public class NPGuy extends Trait {
 	private String uid;
+	private List<Conversation> heldConversations;
 	
 	public NPGuy() {
 		super("npguy");
+		heldConversations = new ArrayList<Conversation>();
 	}
 	
 	@Override
@@ -57,11 +60,11 @@ public class NPGuy extends Trait {
 		for(String responseUid : message.getPossibleResponses()) {
 			try {
 				PlayerMessage response = DialogueManager.getPlayerMessage(uid, responseUid);
-				if (areRequirementsDone(player, response)) {
+				if (areRequirementsMet(player, response)) {
 					responseList.add(response);
 				}
 			} catch (MessageNotFoundException e) {
-				//TODO Print exception to console
+				e.printStackTrace();
 			}
 		}
 		
@@ -72,13 +75,17 @@ public class NPGuy extends Trait {
 		return responseList;
 	}
 
-	private boolean areRequirementsDone(Player player, PlayerMessage response) {
+	private boolean areRequirementsMet(Player player, PlayerMessage response) {
 		for (Requirement requirement : response.getRequirements()) {
 			if (requirement.isMet(getNPC(), player) == requirement.isReversed()) {
 				return false;
 			}
 		}
 		return true;
+	}
+	
+	public List<Conversation> getHeldConversations() {
+		return heldConversations;
 	}
 	
 	public String getUID() {

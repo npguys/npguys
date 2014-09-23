@@ -58,18 +58,25 @@ public class ConversationManager {
 		if (conversation == null) 
 			return;
 		
-		conversations.remove(caller);	
+		NPGuy npguy = conversation.getNPGuy();
+		npguy.getHeldConversations().remove(conversation);
+		if(npguy.getHeldConversations().isEmpty()) {
+			npguy.getNPC().getDefaultGoalController().setPaused(false);
+		}
+		conversations.remove(caller);
 		conversation.end();
 		HandlerList.unregisterAll(conversation.getUI());
 	}
 
 	public static void beginConversation(Player caller, NPGuy npc){
+		npc.getNPC().getDefaultGoalController().setPaused(true);
+		
 		endConversation(caller);
 		try {
 			Conversation conversation;
 			conversation = new Conversation(caller, npc);
-			
 			conversations.put(caller, conversation);
+			npc.getHeldConversations().add(conversation);
 			
 			NPGuys.getPlugin().getServer().getPluginManager().registerEvents(conversation.getUI(), NPGuys.getPlugin());
 			conversation.beginConversation();
