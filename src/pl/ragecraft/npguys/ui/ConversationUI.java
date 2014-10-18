@@ -62,21 +62,22 @@ public abstract class ConversationUI implements Listener {
 			conversation.getPlayer().sendMessage(playerMsg);
 		}
 		
-		String npcMsg = npcMessageFormat;
+		if(!conversation.getDisplayedMessage().getNPCMessage().getMessage().equals("")) {
+			String npcMsg = npcMessageFormat;
 
-		npcMsg = npcMsg.replaceAll("%msg", conversation.getDisplayedMessage().getNPCMessage().getMessage());
-		npcMsg = npcMsg.replaceAll("%player", conversation.getPlayer().getName());
-		npcMsg = npcMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
-		npcMsg = npcMsg.replace('&', '§');
-		final String final_npcMsg = npcMsg;
-		
-		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
-			@Override
-			public void run() {
-				if(!conversation.getDisplayedMessage().getNPCMessage().equals(""))
+			npcMsg = npcMsg.replaceAll("%msg", conversation.getDisplayedMessage().getNPCMessage().getMessage());
+			npcMsg = npcMsg.replaceAll("%player", conversation.getPlayer().getName());
+			npcMsg = npcMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
+			npcMsg = npcMsg.replace('&', '§');
+			final String final_npcMsg = npcMsg;
+			
+			Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
+				@Override
+				public void run() {
 					conversation.getPlayer().sendMessage(final_npcMsg);
-			}
-		}, npcDelay);
+				}
+			}, npcDelay);
+		}	
 	}
 	
 	public final void scheduleChoiceViewOpening() {

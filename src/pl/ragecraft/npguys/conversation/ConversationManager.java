@@ -70,6 +70,7 @@ public class ConversationManager {
 
 	public static void beginConversation(Player caller, NPGuy npc){
 		npc.getNPC().getDefaultGoalController().setPaused(true);
+		npc.getNPC().getNavigator().cancelNavigation();
 		
 		endConversation(caller);
 		try {
