@@ -19,6 +19,7 @@
 package pl.ragecraft.npguys.conversation;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
@@ -38,7 +39,7 @@ import pl.ragecraft.npguys.exception.UIMissingException;
 
 public class ConversationManager {
 	private static NPGuys plugin = null;
-	private static HashMap<Player, Conversation> conversations = new HashMap<Player, Conversation>();
+	private static Map<Player, Conversation> conversations = new HashMap<Player, Conversation>();
 	
 	public static void init(final NPGuys plugin) {
 		ConversationManager.plugin = plugin;
@@ -54,7 +55,10 @@ public class ConversationManager {
 		}
 		endConversation(caller);
 	}
-
+	
+	public static Map<Player, Conversation> getConversations() {
+		return conversations;
+	}
 
 	public static void endConversation(Player caller) {
 		Conversation conversation = conversations.get(caller);

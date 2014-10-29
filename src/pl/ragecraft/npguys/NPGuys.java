@@ -30,7 +30,6 @@ import pl.ragecraft.npguys.action.TakePermission;
 import pl.ragecraft.npguys.action.quest.BeginQuest;
 import pl.ragecraft.npguys.action.quest.CompleteObjectives;
 import pl.ragecraft.npguys.action.quest.CompleteQuest;
-import pl.ragecraft.npguys.commands.NPGuyCommands;
 import pl.ragecraft.npguys.commands.NPGuysCommands;
 import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.editor.DialogueEditor;
@@ -85,7 +84,9 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerRequirement("HEROCLASS", RequiredHeroClass.class);
 		ElementManager.registerRequirement("MIN_MONEY", MinimumMoney.class);
 		
-		getCommand("npguy").setExecutor(new NPGuyCommands());
+		getCommand("npguy").setExecutor(DialogueEditor.getCommandHandler());
+		getCommand("npg").setExecutor(DialogueEditor.getCommandHandler());
+		getCommand("dialogue").setExecutor(DialogueEditor.getCommandHandler());
 		getCommand("npguys").setExecutor(new NPGuysCommands());
 		
 		ElementManager.getCitizens().getTraitFactory().registerTrait(TraitInfo.create(NPGuy.class).withName("npguy"));

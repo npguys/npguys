@@ -26,7 +26,7 @@ public class InvalidCommandException extends Exception {
 	String message;
 	
 	public InvalidCommandException(String message) {
-		// TODO Auto-generated constructor stub
+		this.message = "Invalid command: "+message;
 	}
 
 	@Override

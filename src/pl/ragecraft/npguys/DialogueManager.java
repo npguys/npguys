@@ -30,6 +30,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import pl.ragecraft.npguys.action.Action;
+import pl.ragecraft.npguys.conversation.Conversation;
+import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
 import pl.ragecraft.npguys.exception.ActionMissingException;
@@ -74,8 +76,8 @@ public class DialogueManager {
 	}
 	
 	private static void load(String npguy, YamlConfiguration data) {
-		NPGuyData toLoad = new NPGuyData(npguy);
-		//TODO Handle exceptions
+		NPGuyData toLoad = new NPGuyData(npguy,
+				(data.contains("active") ? data.getBoolean("active") : true));
 		toLoad.setWelcomeMessage(data.getString("welcome_message"));
 		for (String messageName : data.getConfigurationSection("dialogues").getKeys(false)) {
 			String shortcut = data.getString("dialogues."+messageName+".shortcut");
@@ -97,10 +99,8 @@ public class DialogueManager {
 					}
 					loadedRequirements.add(loadedRequirement);
 				} catch (FailedToLoadException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (RequirementMissingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -136,6 +136,7 @@ public class DialogueManager {
 	
 	private static void save(String npguy, YamlConfiguration data) {
 		NPGuyData toSave = npguys.get(npguy);
+		data.set("active", toSave.isActive());
 		data.set("welcome_message", toSave.getWelcomeMessage());
 		for (String dialogue : toSave.getDialogues().keySet()) {
 			ConfigurationSection savedMessage = data.createSection("dialogues."+dialogue);
@@ -220,6 +221,17 @@ public class DialogueManager {
 		}
 	}
 	
+	public static void setActive(String npguy, boolean active) throws NPGuyNotFoundException {
+		getData(npguy).setActive(active);
+		if(active == false) {
+			for(Conversation conversation : ConversationManager.getConversations().values()) {
+				if(conversation.getNPGuy().getUID().equals(npguy)) {
+					ConversationManager.endConversation(conversation.getPlayer(), conversation.getNPGuy().getNPC());
+				}
+			}
+		}
+	}
+	
 	public static boolean isActive(String npguy) throws NPGuyNotFoundException {
 		return getData(npguy).isActive();
 	}
@@ -227,13 +239,17 @@ public class DialogueManager {
 	public static PlayerMessage getWelcomeMessage(String npguy) {
 		try {
 			return getPlayerMessage(npguy, npguys.get(npguy).getWelcomeMessage());
-		} catch (MessageNotFoundException e) {
+		} catch (MessageNotFoundException | NPGuyNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public static PlayerMessage getPlayerMessage(String npguy, String dialogue) throws MessageNotFoundException {
+	public static PlayerMessage getPlayerMessage(String npguy, String dialogue) throws MessageNotFoundException, NPGuyNotFoundException {
+		PlayerMessage message = getData(npguy).getDialogues().get(dialogue);
+		if(message == null) {
+			throw new MessageNotFoundException(npguy, dialogue);
+		}
 		return npguys.get(npguy).getDialogues().get(dialogue);
 	}
 	
@@ -256,5 +272,12 @@ public class DialogueManager {
 		List<String> possibleResponses = new ArrayList<String>();
 		NPCMessage response = new NPCMessage(plugin.getConfig().getString("dialogues.exit.npc_response.message"), possibleResponses);
 		return new PlayerMessage("", plugin.getConfig().getString("dialogues.exit.shortcut"), plugin.getConfig().getString("dialogues.exit.message"), response, requirements, actions);
+	}
+
+	public static void createNPGuy(String name, boolean active) throws NPGuyAlreadyExistsException {
+		NPGuyData npguy = new NPGuyData(name, active);
+		npguy.setWelcomeMessage("default");
+		npguy.getDialogues().put("default", getDefaultMessage("default"));
+		putData(name, npguy);
 	}
 }
