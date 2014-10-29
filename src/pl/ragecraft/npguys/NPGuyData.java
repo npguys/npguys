@@ -18,15 +18,38 @@
 
 package pl.ragecraft.npguys;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import pl.ragecraft.npguys.conversation.PlayerMessage;
 
 public class NPGuyData {
-	public String name = "";
+	private String name;
+	private boolean active = false;
+	private String welcomeMessage = "default";
+	private Map<String,PlayerMessage> dialogues;
 	
-	public String welcomeMessage = "";
+	public NPGuyData(String name) {
+		this.name = name;
+		dialogues.put("default", DialogueManager.getDefaultMessage());
+	}
+
+	public String getName() {
+		return name;
+	}
 	
-	public Map<String,PlayerMessage> dialogues = new HashMap<String,PlayerMessage>();
+	public boolean isActive() {
+		return active;
+	}
+	
+	public String getWelcomeMessage() {
+		return welcomeMessage;
+	}
+	
+	public void setWelcomeMessage(String welcomeMessage) {
+		this.welcomeMessage = welcomeMessage;
+	}
+	
+	public Map<String,PlayerMessage> getDialogues() {
+		return dialogues;
+	}
 }

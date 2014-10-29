@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import pl.ragecraft.npguys.NPGuy;
 import pl.ragecraft.npguys.NPGuys;
+import pl.ragecraft.npguys.exception.NPGuyNotActiveException;
 import pl.ragecraft.npguys.exception.UIMissingException;
 
 public class ConversationManager {
@@ -43,6 +44,8 @@ public class ConversationManager {
 		ConversationManager.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(new EventListener(), plugin);
 	}
+	
+	private ConversationManager() {}
 	
 	public static void endConversation(Player caller, NPC npc) {
 		Conversation conversation = conversations.get(caller);
@@ -68,7 +71,11 @@ public class ConversationManager {
 		HandlerList.unregisterAll(conversation.getUI());
 	}
 
-	public static void beginConversation(Player caller, NPGuy npc){
+	public static void beginConversation(Player caller, NPGuy npc) throws NPGuyNotActiveException{
+		if(!npc.isActive()) {
+			throw new NPGuyNotActiveException();
+		}
+		
 		npc.getNPC().getDefaultGoalController().setPaused(true);
 		npc.getNPC().getNavigator().cancelNavigation();
 		
@@ -122,7 +129,11 @@ public class ConversationManager {
 			
 			Conversation conversation = getConversationByCaller(player);
 			if (conversation == null || conversation.getNPGuy().getNPC() != npc) {
-				beginConversation(player, npc.getTrait(NPGuy.class));
+				try {
+					beginConversation(player, npc.getTrait(NPGuy.class));
+				} catch (NPGuyNotActiveException e) {
+					// Do nothing
+				}
 			}
 		}
 		

@@ -59,6 +59,8 @@ public class ElementManager {
 	
 	private static String defaultUI;
 	
+	private ElementManager() {}
+	
 	public static void init(NPGuys plugin) {
 		reload(plugin);
 		

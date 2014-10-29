@@ -46,6 +46,8 @@ public class DialogueManager {
 	private static File npcs;
 	private static Map<String, NPGuyData> npguys;
 	
+	private DialogueManager() {}
+	
 	public static void init(final NPGuys plugin) {
 		DialogueManager.plugin = plugin;
 		
@@ -72,20 +74,19 @@ public class DialogueManager {
 	}
 	
 	private static void load(String npguy, YamlConfiguration data) {
-		NPGuyData toLoad = new NPGuyData();
+		NPGuyData toLoad = new NPGuyData(npguy);
 		//TODO Handle exceptions
-		toLoad.name = npguy;
-		toLoad.welcomeMessage = data.getString("welcome_message");
-		for (String messageUid : data.getConfigurationSection("dialogues").getKeys(false)) {
-			String shortcut = data.getString("dialogues."+messageUid+".shortcut");
-			String message = data.getString("dialogues."+messageUid+".message");
+		toLoad.setWelcomeMessage(data.getString("welcome_message"));
+		for (String messageName : data.getConfigurationSection("dialogues").getKeys(false)) {
+			String shortcut = data.getString("dialogues."+messageName+".shortcut");
+			String message = data.getString("dialogues."+messageName+".message");
 			
 			List<Requirement> loadedRequirements = new ArrayList<Requirement>();
-			if (data.getConfigurationSection("dialogues."+messageUid+".requirements") == null) {
-				data.getConfigurationSection("dialogues."+messageUid).createSection("requirements");
+			if (data.getConfigurationSection("dialogues."+messageName+".requirements") == null) {
+				data.getConfigurationSection("dialogues."+messageName).createSection("requirements");
 			}
-			for (String key : data.getConfigurationSection("dialogues."+messageUid+".requirements").getKeys(false)) {
-				ConfigurationSection requirement = data.getConfigurationSection("dialogues."+messageUid+".requirements."+key);
+			for (String key : data.getConfigurationSection("dialogues."+messageName+".requirements").getKeys(false)) {
+				ConfigurationSection requirement = data.getConfigurationSection("dialogues."+messageName+".requirements."+key);
 				
 				String type = requirement.getString("type");
 				try {
@@ -105,11 +106,11 @@ public class DialogueManager {
 			}
 			
 			List<Action> loadedActions = new ArrayList<Action>();
-			if (data.getConfigurationSection("dialogues."+messageUid+".actions") == null) {
-				data.getConfigurationSection("dialogues."+messageUid).createSection("actions");
+			if (data.getConfigurationSection("dialogues."+messageName+".actions") == null) {
+				data.getConfigurationSection("dialogues."+messageName).createSection("actions");
 			}
-			for (String key : data.getConfigurationSection("dialogues."+messageUid+".actions").getKeys(false)) {
-				ConfigurationSection action = data.getConfigurationSection("dialogues."+messageUid+".actions."+key);
+			for (String key : data.getConfigurationSection("dialogues."+messageName+".actions").getKeys(false)) {
+				ConfigurationSection action = data.getConfigurationSection("dialogues."+messageName+".actions."+key);
 				
 				String type = action.getString("type");
 				try {
@@ -123,22 +124,22 @@ public class DialogueManager {
 				}
 			}
 			
-			String npcResponse_message = data.getString("dialogues."+messageUid+".npc_response.message");
-			List<String> possibleResponses = data.getStringList("dialogues."+messageUid+".npc_response.possible_responses");
+			String npcResponse_message = data.getString("dialogues."+messageName+".npc_response.message");
+			List<String> possibleResponses = data.getStringList("dialogues."+messageName+".npc_response.possible_responses");
 			NPCMessage npcResponse = new NPCMessage(npcResponse_message, possibleResponses);
 			
 			PlayerMessage loadedMessage = new PlayerMessage(shortcut, message, npcResponse, loadedRequirements, loadedActions);
-			toLoad.dialogues.put(messageUid, loadedMessage);
+			toLoad.getDialogues().put(messageName, loadedMessage);
 		}
 		npguys.put(npguy, toLoad);
 	}
 	
 	private static void save(String npguy, YamlConfiguration data) {
 		NPGuyData toSave = npguys.get(npguy);
-		data.set("welcome_message", toSave.welcomeMessage);
-		for (String uid : toSave.dialogues.keySet()) {
-			ConfigurationSection savedMessage = data.createSection("dialogues."+uid);
-			PlayerMessage messageToSave = toSave.dialogues.get(uid);
+		data.set("welcome_message", toSave.getWelcomeMessage());
+		for (String dialogue : toSave.getDialogues().keySet()) {
+			ConfigurationSection savedMessage = data.createSection("dialogues."+dialogue);
+			PlayerMessage messageToSave = toSave.getDialogues().get(dialogue);
 			
 			savedMessage.set("shortcut", messageToSave.getShortcut());
 			savedMessage.set("message", messageToSave.getMessage());
@@ -219,17 +220,21 @@ public class DialogueManager {
 		}
 	}
 	
+	public static boolean isActive(String npguy) throws NPGuyNotFoundException {
+		return getData(npguy).isActive();
+	}
+	
 	public static PlayerMessage getWelcomeMessage(String npguy) {
 		try {
-			return getPlayerMessage(npguy, npguys.get(npguy).welcomeMessage);
+			return getPlayerMessage(npguy, npguys.get(npguy).getWelcomeMessage());
 		} catch (MessageNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public static PlayerMessage getPlayerMessage(String npguy, String uid) throws MessageNotFoundException {
-		return npguys.get(npguy).dialogues.get(uid);
+	public static PlayerMessage getPlayerMessage(String npguy, String dialogue) throws MessageNotFoundException {
+		return npguys.get(npguy).getDialogues().get(dialogue);
 	}
 	
 	public static PlayerMessage getDefaultMessage() {
