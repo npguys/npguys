@@ -30,7 +30,7 @@ public class NPGuyData {
 	
 	public NPGuyData(String name) {
 		this.name = name;
-		dialogues.put("default", DialogueManager.getDefaultMessage());
+		dialogues.put("default", DialogueManager.getDefaultMessage("default"));
 	}
 
 	public String getName() {

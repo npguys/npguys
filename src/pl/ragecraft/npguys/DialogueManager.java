@@ -128,7 +128,7 @@ public class DialogueManager {
 			List<String> possibleResponses = data.getStringList("dialogues."+messageName+".npc_response.possible_responses");
 			NPCMessage npcResponse = new NPCMessage(npcResponse_message, possibleResponses);
 			
-			PlayerMessage loadedMessage = new PlayerMessage(shortcut, message, npcResponse, loadedRequirements, loadedActions);
+			PlayerMessage loadedMessage = new PlayerMessage(messageName, shortcut, message, npcResponse, loadedRequirements, loadedActions);
 			toLoad.getDialogues().put(messageName, loadedMessage);
 		}
 		npguys.put(npguy, toLoad);
@@ -237,12 +237,12 @@ public class DialogueManager {
 		return npguys.get(npguy).getDialogues().get(dialogue);
 	}
 	
-	public static PlayerMessage getDefaultMessage() {
+	public static PlayerMessage getDefaultMessage(String name) {
 		List<Action> actions = new ArrayList<Action>();
 		List<Requirement> requirements = new ArrayList<Requirement>();
 		List<String> possibleResponses = new ArrayList<String>();
 		NPCMessage response = new NPCMessage(plugin.getConfig().getString("dialogues.default.npc_response.message"), possibleResponses);
-		return new PlayerMessage(plugin.getConfig().getString("dialogues.default.shortcut"), plugin.getConfig().getString("dialogues.default.message"), response, requirements, actions);
+		return new PlayerMessage(name, plugin.getConfig().getString("dialogues.default.shortcut"), plugin.getConfig().getString("dialogues.default.message"), response, requirements, actions);
 	}
 	
 	public static PlayerMessage getExitMessage() {
@@ -255,6 +255,6 @@ public class DialogueManager {
 		List<Requirement> requirements = new ArrayList<Requirement>();
 		List<String> possibleResponses = new ArrayList<String>();
 		NPCMessage response = new NPCMessage(plugin.getConfig().getString("dialogues.exit.npc_response.message"), possibleResponses);
-		return new PlayerMessage(plugin.getConfig().getString("dialogues.exit.shortcut"), plugin.getConfig().getString("dialogues.exit.message"), response, requirements, actions);
+		return new PlayerMessage("", plugin.getConfig().getString("dialogues.exit.shortcut"), plugin.getConfig().getString("dialogues.exit.message"), response, requirements, actions);
 	}
 }

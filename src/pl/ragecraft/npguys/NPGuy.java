@@ -31,6 +31,7 @@ import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.conversation.NPCMessage;
 import pl.ragecraft.npguys.conversation.PlayerMessage;
 import pl.ragecraft.npguys.exception.MessageNotFoundException;
+import pl.ragecraft.npguys.exception.NPGuyNotFoundException;
 import pl.ragecraft.npguys.requirement.Requirement;
 
 
@@ -57,9 +58,9 @@ public class NPGuy extends Trait {
 	public List<PlayerMessage> getPossibleResponses(NPCMessage message, Player player) {
 		List<PlayerMessage> responseList = new ArrayList<PlayerMessage>();
 		
-		for(String responseUid : message.getPossibleResponses()) {
+		for(String responseName : message.getPossibleResponses()) {
 			try {
-				PlayerMessage response = DialogueManager.getPlayerMessage(uid, responseUid);
+				PlayerMessage response = DialogueManager.getPlayerMessage(uid, responseName);
 				if (areRequirementsMet(player, response)) {
 					responseList.add(response);
 				}
@@ -95,6 +96,15 @@ public class NPGuy extends Trait {
 	public void setUID(String uid) {
 		this.uid = uid;
 		reload();
+	}
+	
+	public boolean isActive() {
+		try {
+			return DialogueManager.isActive(uid);
+		} catch (NPGuyNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public void reload() {

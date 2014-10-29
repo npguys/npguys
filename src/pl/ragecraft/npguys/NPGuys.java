@@ -33,6 +33,7 @@ import pl.ragecraft.npguys.action.quest.CompleteQuest;
 import pl.ragecraft.npguys.commands.NPGuyCommands;
 import pl.ragecraft.npguys.commands.NPGuysCommands;
 import pl.ragecraft.npguys.conversation.ConversationManager;
+import pl.ragecraft.npguys.editor.DialogueEditor;
 import pl.ragecraft.npguys.requirement.MinimumLevel;
 import pl.ragecraft.npguys.requirement.RequiredPermission;
 import pl.ragecraft.npguys.requirement.heroes.RequiredHeroClass;
@@ -60,6 +61,8 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.init(this);
 		DialogueManager.init(this);
 		ConversationManager.init(this);
+		
+		DialogueEditor.init(this);
 		
 		ElementManager.registerUI("SCOREBOARD", ScoreboardUI.class);
 		ElementManager.registerUI("BOSS_HEALTHBAR", BossUI.class);
