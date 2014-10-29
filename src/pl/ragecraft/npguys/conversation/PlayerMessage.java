@@ -26,18 +26,23 @@ import pl.ragecraft.npguys.requirement.Requirement;
 
 
 public class PlayerMessage {
+	private String dialogueName;
 	private String shortcut;
 	private String message;
 	private NPCMessage response;
 	private List<Action> actions = new ArrayList<Action>();
 	private List<Requirement> requirements = new ArrayList<Requirement>();
 	
-	public PlayerMessage(String shortcut, String message, NPCMessage response, List<Requirement> requirements, List<Action> actions) {
+	public PlayerMessage(String dialogueName, String shortcut, String message, NPCMessage response, List<Requirement> requirements, List<Action> actions) {
 		this.shortcut = shortcut;
 		this.message = message;
 		this.response = response;
 		this.requirements = requirements;
 		this.actions = actions;
+	}
+	
+	public String getName() {
+		return dialogueName;
 	}
 	
 	public String getShortcut(){
