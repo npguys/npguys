@@ -24,14 +24,14 @@ public class MessageNotFoundException extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	String npguy, message;
+	String npguy, dialogue;
 	
-	public MessageNotFoundException(String npguy, String message) {
+	public MessageNotFoundException(String npguy, String dialogue) {
 		this.npguy = npguy;
-		this.message = message;
+		this.dialogue = dialogue;
 	}
 	
 	public String getMessage() {
-		return message;
+		return "Dialogue '"+dialogue+"' not found @ NPGuy '"+npguy+"'!";
 	}
 }

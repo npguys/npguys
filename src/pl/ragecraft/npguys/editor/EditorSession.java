@@ -50,7 +50,7 @@ public class EditorSession {
 	
 	public void selectDialogue(String dialogue) throws MessageNotFoundException, NoNPGuySelectedException {
 		try {
-			DialogueManager.getPlayerMessage(getSelectedNPGuy().getName(), dialogue);
+			selectedDialogue = DialogueManager.getPlayerMessage(getSelectedNPGuy().getName(), dialogue);
 		} catch (NPGuyNotFoundException e) {
 			throw new NoNPGuySelectedException();
 		}

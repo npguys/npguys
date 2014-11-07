@@ -64,7 +64,7 @@ public class NPGuy extends Trait {
 				if (areRequirementsMet(player, response)) {
 					responseList.add(response);
 				}
-			} catch (MessageNotFoundException e) {
+			} catch (MessageNotFoundException | NPGuyNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
