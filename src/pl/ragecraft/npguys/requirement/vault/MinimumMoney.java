@@ -60,14 +60,12 @@ public class MinimumMoney extends Requirement {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if player has enough money.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[money]";
 	}
 
 	@Override

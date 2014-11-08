@@ -34,6 +34,7 @@ public class PlayerMessage {
 	private List<Requirement> requirements = new ArrayList<Requirement>();
 	
 	public PlayerMessage(String dialogueName, String shortcut, String message, NPCMessage response, List<Requirement> requirements, List<Action> actions) {
+		this.dialogueName = dialogueName;
 		this.shortcut = shortcut;
 		this.message = message;
 		this.response = response;

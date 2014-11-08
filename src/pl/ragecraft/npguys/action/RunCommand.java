@@ -69,14 +69,12 @@ public class RunCommand extends Action {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Executes specified console command.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[cmd]";
 	}
 
 	@Override

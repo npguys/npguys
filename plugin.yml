@@ -1,5 +1,5 @@
 name: NPGuys
-version: "1.4.0 BETA (Dev build)"
+version: "1.4.0"
 author: Goldob
 main: pl.ragecraft.npguys.NPGuys
 depend: [Citizens]
@@ -10,27 +10,14 @@ commands:
     description: "NPGuy management commands"
     aliases: [npg]
     permission: npguys.manage
-    ussage: "Unknown command! Type /npguy for command list!"
   dialogue:
     description: "Dialogue management commands"
     permission: npguys.manage
-    ussage: "Unknown command! Type /npguy for command list!"
   npguys:
     description: "Plugin management commands"
     permission: npguys.manage
 
 permissions:
-  npguys.*:
-    desciption: "Gives access to all NPGuys features"
-    default: op
-    children:
-      npguys.manage.*: true
-  npguys.manage.*:
-    description: "Gives access to NPGuys management commands"
-    children:
-      npguys.manage.dialogues: true
-      npguys.manage.npc: true
-      npguys.manage.commands: true
   npguys.manage:
     description: "You need this to perform any NPGuys commands"
     default: op

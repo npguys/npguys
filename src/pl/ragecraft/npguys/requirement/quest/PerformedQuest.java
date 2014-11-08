@@ -54,7 +54,7 @@ public class PerformedQuest extends Requirement {
 			quest = data.getString("quest");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Quest name missing!");
 		}
 		if (data.contains("objectives")) {
 			if (data.get("objectives") instanceof List<?>) {
@@ -69,7 +69,7 @@ public class PerformedQuest extends Requirement {
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
 		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+			throw new InvalidCommandException("Quest name missing!");
 		}
 		quest = data[0];
 		for (int i = 1; i < data.length; i++) {
@@ -91,14 +91,12 @@ public class PerformedQuest extends Requirement {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if the player is now performing certain quest.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[quest] (obj1, obj2,...)";
 	}
 
 	@Override

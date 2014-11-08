@@ -54,14 +54,12 @@ public class MinimumLevel extends Requirement {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if player has reached the required level.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[level]";
 	}
 
 	@Override

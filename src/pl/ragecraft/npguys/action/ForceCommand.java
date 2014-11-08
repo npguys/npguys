@@ -51,14 +51,12 @@ public class ForceCommand extends Action {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Makes specified player to execute a command.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[cmd]";
 	}
 
 	@Override

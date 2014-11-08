@@ -32,7 +32,6 @@ public class GivePermission extends Action {
 	
 	public GivePermission(String type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -70,14 +69,12 @@ public class GivePermission extends Action {
 	
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Gives player a permission.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[permission]";
 	}
 
 	@Override

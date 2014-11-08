@@ -67,14 +67,12 @@ public class RequiredPermission extends Requirement {
 	
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if the player has certain permission.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[permission]";
 	}
 
 	@Override

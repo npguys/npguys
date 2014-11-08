@@ -66,7 +66,7 @@ public class CompleteObjectives extends Action {
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
 		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+			throw new InvalidCommandException("Quest name missing!");
 		}
 		if (data.length < 2) {
 			throw new InvalidCommandException("Quest objectives missing!");
@@ -91,14 +91,12 @@ public class CompleteObjectives extends Action {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Completes quest objectives.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[quest] [obj1] (obj2, obj3,...)";
 	}
 
 	@Override

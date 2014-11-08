@@ -51,14 +51,12 @@ public class AbandonConversation extends Action {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Immediately breaks conversation.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override

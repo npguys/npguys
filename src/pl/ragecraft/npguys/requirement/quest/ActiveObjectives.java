@@ -32,7 +32,7 @@ public class ActiveObjectives extends Requirement {
 			quest = data.getString("quest");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Quest name missing!");
 		}
 		if (data.contains("objectives") && data.get("objectives") instanceof List<?>) {
 			objectives.addAll(data.getIntegerList("objectives"));
@@ -48,7 +48,7 @@ public class ActiveObjectives extends Requirement {
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
 		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+			throw new InvalidCommandException("Quest name missing!");
 		}
 		if (data.length < 2) {
 			throw new InvalidCommandException("Quest objectives missing!");
@@ -73,14 +73,12 @@ public class ActiveObjectives extends Requirement {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if the player is performing certain quest and certain objectives are active for him.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[quest] [obj1] (obj2, obj3,...)";
 	}
 
 	@Override

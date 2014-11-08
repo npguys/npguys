@@ -18,7 +18,6 @@
 
 package pl.ragecraft.npguys.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,33 +27,39 @@ import pl.ragecraft.npguys.ElementManager;
 import pl.ragecraft.npguys.NPGuys;
 import pl.ragecraft.npguys.conversation.ConversationManager;
 
-public class NPGuysCommands implements CommandExecutor {
+public class NPGuysCommands extends CommandUtils implements CommandExecutor {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		switch(args.length) {
-		case 0:
-			return false;
-		case 1:
-			if(args[0].equalsIgnoreCase("reload")) {
-				sender.sendMessage(ChatColor.GREEN.toString()+"Reloading NPGuys data...");
+	public boolean onCommand(CommandSender sender, Command command, String label,
+			String[] arguments) {
+		/*if(arguments.length == 0) {
+			// TODO Command list
+			return true;
+		}*/
+		if(assertArgsLengthEqual(sender, 1, arguments)) {
+			switch(arguments[0].toLowerCase()) {
+				case "reload":
+					sendFeedback(sender, "Reloading NPGuys data from YML files...");
+					ConversationManager.endAll();
+					
+					ElementManager.reload(NPGuys.getPlugin());
+					DialogueManager.reload();
+					break;
+				case "save":
+					sendFeedback(sender, "Saving NPGuys data to YML files...");
 				
-				ConversationManager.endAll();
-				
-				ElementManager.reload(NPGuys.getPlugin());
-				DialogueManager.reload();
-				return true;
+					DialogueManager.saveAll();
+					break;
+				case "requirements":
+					sendFeedback(sender, ElementManager.generateRequirementsList());
+					break;
+			case "actions":
+					sendFeedback(sender, ElementManager.generatActionsList());
+					break;
+				default:
+				reportFailure(sender, COMMAND_NOT_RECOGNIZED);			
 			}
-			if(args[0].equalsIgnoreCase("save")) {
-				sender.sendMessage(ChatColor.GREEN.toString()+"Saving NPGuys data...");
-				
-				DialogueManager.saveAll();
-				return true;
-			}
-		default:
-			return false;
 		}
+		return true;
 	}
-	
 }

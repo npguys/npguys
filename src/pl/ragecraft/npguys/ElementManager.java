@@ -23,11 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import pl.ragecraft.npguys.action.Action;
+import pl.ragecraft.npguys.commands.CommandUtils;
 import pl.ragecraft.npguys.conversation.Conversation;
 import pl.ragecraft.npguys.exception.ActionMissingException;
 import pl.ragecraft.npguys.exception.RequirementMissingException;
@@ -38,8 +40,8 @@ import pl.ragecraft.npguys.quest.handler.QuesterHandler;
 import pl.ragecraft.npguys.quest.handler.QuestsHandler;
 import pl.ragecraft.npguys.requirement.Requirement;
 import pl.ragecraft.npguys.ui.ConversationUI;
-
 import me.ragan262.quester.Quester;
+
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.CharacterManager;
 
@@ -189,6 +191,46 @@ public class ElementManager {
 	
 	public static void setQuestHandler(QuestHandler questHandler) {
 		ElementManager.questHandler = questHandler;
+	}
+	
+	public static String generateRequirementsList() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Requirements list:");
+		for(String requirementType : requirements.keySet()) {
+			sb.append("\n");
+			sb.append(ChatColor.GOLD).append(requirementType).append(ChatColor.RESET);
+			try {
+				Requirement requirementInstance = newRequirement(requirementType);
+				sb.append("\n").append(CommandUtils.PADDING);
+				sb.append("Description: ").append(requirementInstance.getDescription());
+				sb.append("\n").append(CommandUtils.PADDING);
+				sb.append("Usage: ").append("/dialogue requirement add(r) ").append(requirementType)
+					.append(" ").append(requirementInstance.getUsage());
+			} catch (RequirementMissingException e) {
+				e.printStackTrace();
+			}
+		}
+		return sb.toString();
+	}
+	
+	public static String generatActionsList() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Actions list:");
+		for(String actionType : actions.keySet()) {
+			sb.append("\n");
+			sb.append(ChatColor.GOLD).append(actionType).append(ChatColor.RESET);
+			try {
+				Action actionInstance = newAction(actionType);
+				sb.append("\n").append(CommandUtils.PADDING);
+				sb.append("Description: ").append(actionInstance.getDescription());
+				sb.append("\n").append(CommandUtils.PADDING);
+				sb.append("Usage: ").append("/dialogue action add ").append(actionType)
+					.append(" ").append(actionInstance.getUsage());
+			} catch (ActionMissingException e) {
+				e.printStackTrace();
+			}
+		}
+		return sb.toString();
 	}
 	
 	public static void registerUI(String name, Class<? extends ConversationUI> clazz) {

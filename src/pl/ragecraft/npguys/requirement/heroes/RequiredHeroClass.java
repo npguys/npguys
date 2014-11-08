@@ -52,14 +52,12 @@ public class RequiredHeroClass extends Requirement {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if player has the required Heroes class.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[class]";
 	}
 
 	@Override

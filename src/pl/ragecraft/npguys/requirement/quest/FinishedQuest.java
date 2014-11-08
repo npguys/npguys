@@ -54,7 +54,7 @@ public class FinishedQuest extends Requirement {
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
 		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+			throw new InvalidCommandException("Quest name missing!");
 		}
 		if (data.length > 1) {
 			throw new InvalidCommandException("Too long command syntax!");
@@ -70,18 +70,16 @@ public class FinishedQuest extends Requirement {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Checks if the player has finished certain quest, at least once.";
 	}
 
 	@Override
 	public String getUsage() {
-		return quest;
+		return "[quest]";
 	}
 
 	@Override
 	public String getData() {
-		// TODO Auto-generated method stub
-		return null;
+		return quest;
 	}	
 }

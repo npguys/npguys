@@ -70,14 +70,12 @@ public class TakePermission extends Action {
 	
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Takes back a permission from the player.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[permission]";
 	}
 
 	@Override

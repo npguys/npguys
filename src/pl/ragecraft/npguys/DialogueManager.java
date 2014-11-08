@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -192,6 +193,10 @@ public class DialogueManager {
 			}
 		}
 		plugin.getServer().getLogger().log(Level.INFO, "Dialogues saved.");
+	}
+	
+	public static Set<String> getNPGuysNames() {
+		return npguys.keySet();
 	}
 	
 	public static NPGuyData getData(String npguy) throws NPGuyNotFoundException {

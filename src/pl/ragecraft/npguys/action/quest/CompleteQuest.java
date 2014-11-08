@@ -46,14 +46,14 @@ public class CompleteQuest extends Action {
 			quest = data.getString("quest");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Quest name missing!");
 		}
 	}
 
 	@Override
 	public void fromCommand(String[] data) throws InvalidCommandException {
 		if (data.length < 1) {
-			throw new InvalidCommandException("Quest UID missing!");
+			throw new InvalidCommandException("Quest name missing!");
 		}
 		if (data.length > 1) {
 			throw new InvalidCommandException("Too long command syntax!");
@@ -69,14 +69,12 @@ public class CompleteQuest extends Action {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Completes quest for the player, even if there are still some uncompleted objectives.";
 	}
 
 	@Override
 	public String getUsage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "[quest]";
 	}
 
 	@Override

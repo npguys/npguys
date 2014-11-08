@@ -101,13 +101,57 @@ public class DialogueEditor {
 		private void dialogueCommand(CommandSender sender, String[] arguments) {
 			EditorSession session = getSession(sender);
 			if(arguments.length == 0) {
-				// TODO Print dialogue data
+				try {
+					PlayerMessage dialogue = session.getSelectedDialogue();
+					StringBuilder sb  = new StringBuilder();
+					sb.append("Dialogue data (").append(ChatColor.AQUA).append(dialogue.getName())
+						.append(ChatColor.RESET).append(" @ ").append(ChatColor.AQUA).append(session.getSelectedNPGuy().getName())
+						.append(ChatColor.RESET).append("):").append("\n");
+					sb.append(PADDING).append("Message: ").append(ChatColor.ITALIC).append(dialogue.getMessage())
+						.append(ChatColor.RESET).append("\n");
+					sb.append(PADDING).append("NPC Message: ").append(ChatColor.ITALIC).append(dialogue.getNPCMessage().getMessage())
+						.append(ChatColor.RESET).append("\n");
+					sb.append(PADDING).append("Requirements:").append("\n");
+					
+					int index = 0;
+					for(Requirement requirement : dialogue.getRequirements()) {
+						sb.append(PADDING).append(PADDING).append("- ").append(index).append(": ");;
+						if(requirement.isReversed()) {
+							sb.append("!");
+						}
+						sb.append(requirement.getType());
+						if(!requirement.getData().equalsIgnoreCase("")) {
+							sb.append("(").append(requirement.getData()).append(")");
+						}
+						sb.append("\n");
+						index++;
+					}
+					index = 0;
+					sb.append(PADDING).append("Actions:").append("\n");index = 0;
+					for(Action action : dialogue.getActions()) {
+						sb.append(PADDING).append(PADDING).append("- ").append(index).append(": ");
+						sb.append(action.getType());
+						if(!action.getData().equalsIgnoreCase("")) {
+							sb.append("(").append(action.getData()).append(")");
+						}
+						sb.append("\n");
+						index++;
+					}
+					sb.append(PADDING).append("Possible responses:");
+					for(String response : dialogue.getNPCMessage().getPossibleResponses()) {
+						sb.append("\n").append(PADDING).append(PADDING).append("- ");
+						sb.append(response);
+					}
+					sendFeedback(sender, sb.toString());
+				} catch (NoDialogueSelectedException | NoNPGuySelectedException e) {
+					reportFailure(sender, e.getMessage());
+				}
 				return;
 			}
 			switch(arguments[0].toLowerCase()) {
-			case("list"):
+			/*case("list"):
 				// TODO
-				break;
+				break;*/
 			case("select"):
 				if(assertMinArgsLength(sender, 2, arguments)) {
 					String dialogue = joinStrings(arguments, 1);
@@ -123,7 +167,7 @@ public class DialogueEditor {
 				}
 				break;
 			case("shortcut"):
-				if(assertDialogueEditable(session) && assertMinArgsLength(sender, 2, arguments)) {
+				if(assertMinArgsLength(sender, 2, arguments) && assertDialogueEditable(session)) {
 					String shortcut = joinStrings(arguments, 1);
 					try {
 						session.getSelectedDialogue().setShortcut(shortcut);
@@ -135,13 +179,16 @@ public class DialogueEditor {
 				break;
 			case("message"):
 			case("msg"):
-				if(assertDialogueEditable(session) && assertMinArgsLength(sender, 3, arguments)) {
+				if(assertMinArgsLength(sender, 2, arguments) && assertDialogueEditable(session)) {
 					try {
 						PlayerMessage playerMsg = session.getSelectedDialogue();
-						if(arguments[1].equalsIgnoreCase("set")) {
+						if(arguments[1].equalsIgnoreCase("clear") && assertArgsLengthEqual(sender, 2,  arguments)) {
+							playerMsg.setMessage("");
+							reportSuccess(sender, "Message cleared!");
+						} else if(arguments[1].equalsIgnoreCase("set") && assertMinArgsLength(sender, 3, arguments)) {
 							playerMsg.setMessage(joinStrings(arguments, 2));
 							reportSuccess(sender, "Message changed!");
-						} else if(arguments[1].equalsIgnoreCase("add")) {
+						} else if(arguments[1].equalsIgnoreCase("add") && assertMinArgsLength(sender, 3, arguments)) {
 							playerMsg.setMessage(playerMsg.getMessage()+joinStrings(arguments, 2));
 							reportSuccess(sender, "Message changed!");
 						} else {
@@ -153,25 +200,31 @@ public class DialogueEditor {
 				}
 				break;
 			case("npcmsg"):
-				if(assertDialogueEditable(session) && assertMinArgsLength(sender, 3, arguments)) {
-					try {
-						NPCMessage npcMsg = session.getSelectedDialogue().getNPCMessage();
-						if(arguments[1].equalsIgnoreCase("set")) {
-							npcMsg.setMessage(joinStrings(arguments, 2));
-							reportSuccess(sender, "NPC message changed!");
-						} else if(arguments[1].equalsIgnoreCase("add")) {
-							npcMsg.setMessage(npcMsg.getMessage()+joinStrings(arguments, 2));
-							reportSuccess(sender, "NPC message changed!");
-						} else {
-							reportFailure(sender, COMMAND_NOT_RECOGNIZED);
-						}
-					} catch(NoDialogueSelectedException e) {
-						reportFailure(sender, e.getMessage());
-					}	
+				if(assertMinArgsLength(sender, 3, arguments) && assertDialogueEditable(session)) {
+					if(assertMinArgsLength(sender, 2, arguments) && assertDialogueEditable(session)) {
+						try {
+							NPCMessage npcMsg = session.getSelectedDialogue().getNPCMessage();
+							if(arguments[1].equalsIgnoreCase("clear") && assertArgsLengthEqual(sender, 2,  arguments)) {
+								npcMsg.setMessage("");
+								reportSuccess(sender, "NPC Message cleared!");
+							} else if(arguments[1].equalsIgnoreCase("set") && assertMinArgsLength(sender, 3, arguments)) {
+								npcMsg.setMessage(joinStrings(arguments, 2));
+								reportSuccess(sender, "NPC Message changed!");
+							} else if(arguments[1].equalsIgnoreCase("add") && assertMinArgsLength(sender, 3, arguments)) {
+								npcMsg.setMessage(npcMsg.getMessage()+joinStrings(arguments, 2));
+								reportSuccess(sender, "NPC Message changed!");
+							} else {
+								reportFailure(sender, COMMAND_NOT_RECOGNIZED);
+							}
+						} catch(NoDialogueSelectedException e) {
+							reportFailure(sender, e.getMessage());
+						}	
+					}
+					break;
 				}
 				break;
 			case("response"):
-				if(assertDialogueEditable(session) && assertMinArgsLength(sender, 3, arguments)) {
+				if(assertMinArgsLength(sender, 3, arguments) && assertDialogueEditable(session)) {
 					try {
 						NPCMessage npcMsg = session.getSelectedDialogue().getNPCMessage();
 						String dialogue = joinStrings(arguments, 1);
@@ -193,7 +246,7 @@ public class DialogueEditor {
 				}
 				break;
 			case("action"):
-				if(assertDialogueEditable(session) && assertMinArgsLength(sender, 3, arguments)) {
+				if(assertMinArgsLength(sender, 3, arguments) && assertDialogueEditable(session)) {
 					try {
 						PlayerMessage playerMsg = session.getSelectedDialogue();
 						if(arguments[1].equalsIgnoreCase("add")) {
@@ -201,12 +254,10 @@ public class DialogueEditor {
 							newAction.fromCommand(Arrays.copyOfRange(arguments, 3, arguments.length));
 							playerMsg.getActions().add(newAction);
 							reportSuccess(sender, "Action added!");
-						} else if(arguments[1].equalsIgnoreCase("remove")) {
-							if(assertArgsLengthEqual(sender, 4, arguments)) {
-								int actionIndex = Integer.valueOf(arguments[3]);
-								playerMsg.getActions().remove(actionIndex);
-								reportSuccess(sender, "Action removed!");
-							}
+						} else if(arguments[1].equalsIgnoreCase("remove") && assertArgsLengthEqual(sender, 3, arguments)) {
+							int actionIndex = Integer.valueOf(arguments[2]);
+							playerMsg.getActions().remove(actionIndex);
+							reportSuccess(sender, "Action removed!");
 						} else {
 							reportFailure(sender, COMMAND_NOT_RECOGNIZED);
 						}
@@ -221,7 +272,7 @@ public class DialogueEditor {
 				break;
 			case("requirement"):
 			case("req"):
-				if(assertDialogueEditable(session) && assertMinArgsLength(sender, 3, arguments)) {
+				if(assertMinArgsLength(sender, 3, arguments) && assertDialogueEditable(session)) {
 					try {
 						PlayerMessage playerMsg = session.getSelectedDialogue();
 						if(arguments[1].equalsIgnoreCase("add") || arguments[1].equalsIgnoreCase("addr") || arguments[1].equalsIgnoreCase("addreversed")) {
@@ -230,13 +281,12 @@ public class DialogueEditor {
 							if(arguments[1].equalsIgnoreCase("addr") || arguments[1].equalsIgnoreCase("addreversed")) {
 								newRequirement.setReversed(true);
 							}
-							reportSuccess(sender, "Action added!");
-						} else if(arguments[1].equalsIgnoreCase("remove")) {
-							if(assertArgsLengthEqual(sender, 4, arguments)) {
-								int actionIndex = Integer.valueOf(arguments[3]);
-								playerMsg.getActions().remove(actionIndex);
-								reportSuccess(sender, "Action removed!");
-							}
+							playerMsg.getRequirements().add(newRequirement);
+							reportSuccess(sender, "Requirement added!");
+						} else if(arguments[1].equalsIgnoreCase("remove") && assertArgsLengthEqual(sender, 3, arguments)) {
+							int requirementIndex = Integer.valueOf(arguments[2]);
+							playerMsg.getRequirements().remove(requirementIndex);
+							reportSuccess(sender, "Requirement removed!");
 						} else {
 							reportFailure(sender, COMMAND_NOT_RECOGNIZED);
 						}
@@ -285,12 +335,43 @@ public class DialogueEditor {
 		private void npguyCommand(CommandSender sender, String[] arguments) {
 			EditorSession session = getSession(sender);
 			if(arguments.length == 0) {
-				// TODO Print NPGuy data
+				try {
+					NPGuyData npguy = session.getSelectedNPGuy();
+					StringBuilder sb = new StringBuilder();
+					sb.append("NPGuy data (").append(ChatColor.AQUA).append(npguy.getName())
+						.append(ChatColor.RESET).append("):").append("\n");
+					sb.append(PADDING).append("Active: ").append(npguy.isActive()).append("\n");
+					sb.append(PADDING).append("Welcome message: ").append(npguy.getWelcomeMessage()).append("\n");
+					sb.append(PADDING).append("Dialogues:");
+					for(String dialogue : npguy.getDialogues().keySet()) {
+						sb.append("\n").append(PADDING).append(PADDING).append("- ");
+						sb.append(dialogue);
+					}
+					sendFeedback(sender, sb.toString());
+				} catch(NoNPGuySelectedException e) {
+					reportFailure(sender, e.getMessage());
+				}
 				return;
 			}
 			switch(arguments[0].toLowerCase()) {
 			case("list"):
-				// TODO
+				StringBuilder sb = new StringBuilder();
+				sb.append("NPGuys list:").append("\n");
+				int counter = 0;
+				int size = DialogueManager.getNPGuysNames().size();
+				for(String npguy : DialogueManager.getNPGuysNames()) {
+					counter++;
+					try {
+						sb.append((DialogueManager.isActive(npguy) ? ChatColor.GREEN : ChatColor.RED));
+						sb.append(npguy);
+						if(counter < size) {
+							sb.append(ChatColor.RESET).append(", ");
+						}
+					} catch (NPGuyNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+				sendFeedback(sender, sb.toString());
 				break;
 			case("select"):
 				if(assertMinArgsLength(sender, 2, arguments)) {

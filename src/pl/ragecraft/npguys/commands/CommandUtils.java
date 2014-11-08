@@ -26,6 +26,8 @@ public abstract class CommandUtils {
 	public static final String TOO_MUCH_ARGUMENTS = "Too much arguments. No idea what to do with them... :(";
 	public static final String NOT_ENOUGH_ARGUMENTS = "Not enough arguments.";
 	
+	public static final String PADDING = "   ";
+	
 	public static final void reportSuccess(CommandSender sender, String feedback) {
 		sender.sendMessage(ChatColor.GREEN.toString()+feedback);
 	}
