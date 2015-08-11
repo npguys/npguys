@@ -74,7 +74,7 @@ public class QuesterHandler implements QuestHandler {
 		if (isPerforming(player, questName)) {
 			try {
 				selectQuest(player, questName);
-				getProfileManager().completeQuest(player, ActionSource.otherSource(NPGuys.getPlugin()), getLang(player));
+				getProfileManager().forceCompleteQuest(player, ActionSource.otherSource(NPGuys.getPlugin()), getLang(player));
 			} catch (QuesterException e) {
 				e.printStackTrace();
 			}
