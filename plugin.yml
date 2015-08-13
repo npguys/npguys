@@ -1,5 +1,5 @@
 name: NPGuys
-version: "1.4.2 (Dev build)"
+version: "1.5.0 (Dev build)"
 author: Goldob
 main: pl.ragecraft.npguys.NPGuys
 depend: [Citizens]

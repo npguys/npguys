@@ -140,6 +140,7 @@ public class ElementManager {
 	}
 	
 	public static Action newAction(String name) throws ActionMissingException {
+		name = name.toUpperCase();
 		try {
 			if(actions.containsKey(name)) {
 				return actions.get(name).getConstructor(String.class).newInstance(name);
@@ -168,6 +169,7 @@ public class ElementManager {
 	}
 	
 	public static Requirement newRequirement(String name) throws RequirementMissingException {
+		name = name.toUpperCase();
 		try {
 			if (requirements.containsKey(name)) {
 				return requirements.get(name).getConstructor(String.class).newInstance(name);
