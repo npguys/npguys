@@ -45,6 +45,7 @@ public class Conversation {
 	}
 	
 	public void beginConversation() {
+		ui.conversationStart();
 		continueConversation(DialogueManager.getWelcomeMessage(npc.getUID()));
 	}
 	
@@ -90,7 +91,7 @@ public class Conversation {
 	}
 	
 	protected void end() {
-		ui.closeChoiceView();
+		ui.conversationEnd();
 		finish = true;
 	}
 }

@@ -39,17 +39,20 @@ public class BossUI extends ClassicControlsUI {
 	public BossUI(Conversation conversation) {
 		super(conversation);
 	}
-
+	
 	@Override
-	public void openChoiceView() {
-		super.openChoiceView();
+	public void conversationStart() {}
+	
+	@Override
+	public void responseChoice() {
+		super.responseChoice();
 		PlayerMessage choosenResponse = getConversation().getPossibleResponses().get(getChoosenResponseIndex());
 		float possibleResponsesNumber = (float)getConversation().getPossibleResponses().size();
 		BarAPI.setMessage(getConversation().getPlayer(), choosenResponse.getShortcut(), 100.0F*((float)getChoosenResponseIndex()+1.0F)/possibleResponsesNumber);
 	}
 
 	@Override
-	public void closeChoiceView() {
+	public void conversationEnd() {
 		BarAPI.removeBar(getConversation().getPlayer());
 	}
 }

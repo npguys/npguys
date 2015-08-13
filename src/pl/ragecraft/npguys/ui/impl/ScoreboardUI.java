@@ -33,6 +33,7 @@ import pl.ragecraft.npguys.ui.ClassicControlsUI;
 
 public class ScoreboardUI extends ClassicControlsUI {
 	private static String headline;
+	private static Scoreboard initialState;
 	
 	public ScoreboardUI(Conversation conversation) {
 		super(conversation);
@@ -45,11 +46,17 @@ public class ScoreboardUI extends ClassicControlsUI {
 	}
 	
 	@Override
-	public void openChoiceView() {
-		super.openChoiceView();
-		Scoreboard view = Bukkit.getScoreboardManager().getNewScoreboard();
+	public void conversationStart() {
+		initialState = getConversation().getPlayer().getScoreboard();
+	}
+	
+	@Override
+	public void responseChoice() {
+		super.responseChoice();
+		
+		Scoreboard display = Bukkit.getScoreboardManager().getNewScoreboard();
 		Conversation conversation = getConversation();
-		view.registerNewObjective(ChatColor.UNDERLINE+headline, "dummy").setDisplaySlot(DisplaySlot.SIDEBAR);
+		display.registerNewObjective(ChatColor.UNDERLINE+headline, "dummy").setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		List<PlayerMessage> possibleResponses = conversation.getPossibleResponses();
 		int id = possibleResponses.size();
@@ -68,14 +75,14 @@ public class ScoreboardUI extends ClassicControlsUI {
 			else {
 				line.append(response.getShortcut().substring(0, 13));
 			}
-			view.getObjective(DisplaySlot.SIDEBAR).getScore(line.toString()).setScore(id);
+			display.getObjective(DisplaySlot.SIDEBAR).getScore(line.toString()).setScore(id);
 			id--;
 		}
-		conversation.getPlayer().setScoreboard(view);
+		conversation.getPlayer().setScoreboard(display);
 	}
 
 	@Override
-	public void closeChoiceView() {
-		getConversation().getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+	public void conversationEnd() {
+		getConversation().getPlayer().setScoreboard(initialState);
 	}
 }

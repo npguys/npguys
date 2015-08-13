@@ -51,7 +51,7 @@ public abstract class ClassicControlsUI extends ConversationUI {
 	}
 	
 	@Override
-	public void openChoiceView() {
+	public void responseChoice() {
 		ignoreEvents = false;
 	}
 
@@ -71,7 +71,7 @@ public abstract class ClassicControlsUI extends ConversationUI {
 				choosenResponseIndex = conversation.getPossibleResponses().size()-1;
 			}
 		}
-		openChoiceView();
+		responseChoice();
 	}
 	
 	@EventHandler

@@ -36,7 +36,7 @@ public abstract class ConversationUI implements Listener {
 	private static String npcMessageFormat;
 	
 	// This will be called only once per each registered UI type.
-	 // It should save any values it needs in a static way.
+	// It should save any values it needs in a static way.
 	public void init(ConfigurationSection config) throws UIInitializationFailedException {
 		ConfigurationSection generalConfig = NPGuys.getPlugin().getConfig().getConfigurationSection("ui");
 		npcDelay = generalConfig.getLong("npc.delay");
@@ -84,16 +84,19 @@ public abstract class ConversationUI implements Listener {
 		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
 			@Override
 			public void run() {
-				openChoiceView();
+				responseChoice();
 			}
 		}, npcDelay);
 	}
 	
+	// Called at the beginning of conversation
+	public abstract void conversationStart();
+	
 	// After the method is called, the player should be able to choose his response
-	public abstract void openChoiceView();
+	public abstract void responseChoice();
 	
 	// Called when the conversation ends
-	public abstract void closeChoiceView();
+	public abstract void conversationEnd();
 	
 	protected final Conversation getConversation() {
 		return conversation;
