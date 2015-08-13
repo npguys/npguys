@@ -35,6 +35,7 @@ import pl.ragecraft.npguys.conversation.ConversationManager;
 import pl.ragecraft.npguys.editor.DialogueEditor;
 import pl.ragecraft.npguys.requirement.MinimumLevel;
 import pl.ragecraft.npguys.requirement.RequiredPermission;
+import pl.ragecraft.npguys.requirement.RequiredSkill;
 import pl.ragecraft.npguys.requirement.heroes.RequiredHeroClass;
 import pl.ragecraft.npguys.requirement.quest.ActiveObjectives;
 import pl.ragecraft.npguys.requirement.quest.CompletedObjectives;
@@ -82,6 +83,7 @@ public class NPGuys extends JavaPlugin {
 		ElementManager.registerRequirement("ACTIVE_OBJECTIVES", ActiveObjectives.class);
 		ElementManager.registerRequirement("COMPLETED_OBJECTIVES", CompletedObjectives.class);
 		ElementManager.registerRequirement("HEROCLASS", RequiredHeroClass.class);
+		ElementManager.registerRequirement("SKILL", RequiredSkill.class);
 		ElementManager.registerRequirement("MIN_MONEY", MinimumMoney.class);
 		
 		getCommand("npguy").setExecutor(DialogueEditor.getCommandHandler());

@@ -50,7 +50,7 @@ public class CompleteObjectives extends Action {
 			quest = data.getString("quest");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Quest name missing!");
 		}
 		if (data.contains("objectives") && data.get("objectives") instanceof List<?>) {
 			objectives.addAll(data.getIntegerList("objectives"));

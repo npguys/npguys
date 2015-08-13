@@ -1,9 +1,9 @@
 name: NPGuys
-version: "1.4.1"
+version: "1.4.2 (Dev build)"
 author: Goldob
 main: pl.ragecraft.npguys.NPGuys
 depend: [Citizens]
-softdepend: [Vault, Quests, Quester, Heroes, BarAPI]
+softdepend: [Vault, Quests, Quester, Heroes, SkillAPI, BarAPI]
 
 commands:
   npguy:

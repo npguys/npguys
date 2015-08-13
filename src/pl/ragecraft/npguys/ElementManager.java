@@ -25,6 +25,7 @@ import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -44,6 +45,7 @@ import me.ragan262.quester.Quester;
 
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.CharacterManager;
+import com.sucy.skill.SkillAPI;
 
 import me.blackvein.quests.Quests;
 import net.citizensnpcs.api.CitizensPlugin;
@@ -54,6 +56,7 @@ public class ElementManager {
 	private static CitizensPlugin citizens = null;
 	private static QuestHandler questHandler = null;
 	private static CharacterManager heroesCharacterManager = null;
+	private static SkillHandler skillHandler = null;
 	
 	private static Map<String, Class<? extends Action>> actions;
 	private static Map<String, Class<? extends Requirement>> requirements;
@@ -74,12 +77,31 @@ public class ElementManager {
 	public static void reload(NPGuys plugin) {
 		setupCitizens(plugin);
 		setupEconomy(plugin);
-		setupQuestHandler(plugin);
 		setupHeroes(plugin);
+		setupQuestHandler(plugin);
+		setupSkillHandler(plugin);
 		
 		defaultUI = NPGuys.getPlugin().getConfig().getString("ui.default").toUpperCase();
 	}
-
+	
+	private static void setupSkillHandler(NPGuys plugin) {
+		if(plugin.getServer().getPluginManager().isPluginEnabled("SkillAPI")) {
+			skillHandler = new SkillHandler() {
+				@Override
+				public boolean hasSkill(Player player, String skill) {
+					return SkillAPI.getPlayerData(player).hasSkill(skill);
+				}
+			};
+		} else if(heroesCharacterManager != null) {
+			skillHandler = new SkillHandler() {
+				@Override
+				public boolean hasSkill(Player player, String skill) {
+					return heroesCharacterManager.getHero(player).hasAccessToSkill(skill);
+				}
+			};
+		}
+	}
+	
 	private static void setupQuestHandler(NPGuys plugin) {
 		if(plugin.getServer().getPluginManager().isPluginEnabled("Quester")) {
 			Plugin questerPlugin = plugin.getServer().getPluginManager().getPlugin("Quester");
@@ -193,6 +215,14 @@ public class ElementManager {
 		ElementManager.questHandler = questHandler;
 	}
 	
+	public static SkillHandler getSkillHandler() {
+		return skillHandler;
+	}
+	
+	public static void setSkillHander(SkillHandler skillHandler) {
+		ElementManager.skillHandler = skillHandler;
+	}
+	
 	public static String generateRequirementsList() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Requirements list:");
@@ -276,5 +306,9 @@ public class ElementManager {
 	
 	public static ConversationUI newUI(Conversation conversation) throws UIMissingException {
 		return newUI(defaultUI, conversation);
+	}
+	
+	public static interface SkillHandler {
+		public boolean hasSkill(Player player, String skill);
 	}
 }

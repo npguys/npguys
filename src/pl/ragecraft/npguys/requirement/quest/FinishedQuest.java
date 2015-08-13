@@ -47,7 +47,7 @@ public class FinishedQuest extends Requirement {
 			quest = (String) data.getString("quest");
 		}
 		else {
-			throw new FailedToLoadException("Quest UID missing!");
+			throw new FailedToLoadException("Quest name missing!");
 		}
 	}
 
