@@ -227,7 +227,7 @@ public class DialogueEditor {
 				if(assertMinArgsLength(sender, 3, arguments) && assertDialogueEditable(session)) {
 					try {
 						NPCMessage npcMsg = session.getSelectedDialogue().getNPCMessage();
-						String dialogue = joinStrings(arguments, 1);
+						String dialogue = joinStrings(arguments, 2);
 						if(arguments[1].equalsIgnoreCase("add")) {
 							npcMsg.getPossibleResponses().add(dialogue);
 							reportSuccess(sender, "Response added!");
