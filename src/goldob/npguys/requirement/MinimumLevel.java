@@ -1,7 +1,5 @@
 package goldob.npguys.requirement;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -16,7 +14,7 @@ public class MinimumLevel extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(NPC npc, Player player) {
+	public boolean isMet(Player player) {
 		return player.getLevel() >= minLevel;
 	}
 
@@ -48,7 +46,6 @@ public class MinimumLevel extends Requirement {
 
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("level", minLevel);
 	}
 

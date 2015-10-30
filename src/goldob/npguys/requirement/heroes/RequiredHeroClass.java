@@ -18,8 +18,6 @@
 
 package goldob.npguys.requirement.heroes;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -36,7 +34,7 @@ public class RequiredHeroClass extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(NPC npc, Player player) {
+	public boolean isMet(Player player) {
 		return ElementManager.getHeroesCharacterManager().getHero(player).getHeroClass()
 				.getName().equalsIgnoreCase(className);
 		}
@@ -64,7 +62,6 @@ public class RequiredHeroClass extends Requirement {
 	
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("class", className);
 	}
 

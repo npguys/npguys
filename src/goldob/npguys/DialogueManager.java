@@ -150,7 +150,7 @@ public class DialogueManager {
 			int i = 0;
 			for (Requirement requirement : messageToSave.getRequirements()) {
 				ConfigurationSection savedRequirement = savedMessage.createSection("requirements."+String.valueOf(i));
-				requirement.save(savedRequirement);
+				requirement.saveIt(savedRequirement);
 				i++;
 			}
 			
@@ -158,7 +158,7 @@ public class DialogueManager {
 			i = 0;
 			for (Action action : messageToSave.getActions()) {
 				ConfigurationSection savedAction = savedMessage.createSection("actions."+String.valueOf(i));
-				action.save(savedAction);
+				action.saveIt(savedAction);
 				i++;
 			}
 			

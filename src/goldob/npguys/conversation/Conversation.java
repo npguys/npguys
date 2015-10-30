@@ -62,7 +62,7 @@ public class Conversation {
 		ui.displayMessages();
 		
 		for(Action action : choosenResponse.getActions()) {
-			action.perform(npc.getNPC(), player);
+			action.perform(player);
 		}
 		
 		if (!finish) {

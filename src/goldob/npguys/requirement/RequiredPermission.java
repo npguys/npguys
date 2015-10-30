@@ -18,8 +18,6 @@
 
 package goldob.npguys.requirement;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -34,7 +32,7 @@ public class RequiredPermission extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(NPC npc, Player player) {
+	public boolean isMet(Player player) {
 		return player.hasPermission(permission);
 	}
 
@@ -61,7 +59,6 @@ public class RequiredPermission extends Requirement {
 	
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("permission", permission);
 	}
 	

@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import goldob.npguys.ElementManager;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
-import net.citizensnpcs.api.npc.NPC;
 
 public class RequiredSkill extends Requirement {
 	private String skill;
@@ -34,7 +33,7 @@ public class RequiredSkill extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(NPC npc, Player player) {
+	public boolean isMet(Player player) {
 		return ElementManager.getSkillHandler().hasSkill(player, skill);
 	}
 
@@ -61,7 +60,6 @@ public class RequiredSkill extends Requirement {
 	
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("skill", skill);
 	}
 	

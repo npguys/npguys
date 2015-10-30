@@ -18,8 +18,6 @@
 
 package goldob.npguys.requirement.quest;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -37,7 +35,7 @@ public class FinishedQuest extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(NPC npc, Player player) {
+	public boolean isMet(Player player) {
 		return ElementManager.getQuestHandler().hasCompleted(player, quest);
 	}
 
@@ -64,7 +62,6 @@ public class FinishedQuest extends Requirement {
 
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("quest", quest);
 	}
 

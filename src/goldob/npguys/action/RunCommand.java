@@ -18,8 +18,6 @@
 
 package goldob.npguys.action;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -35,7 +33,7 @@ public class RunCommand extends Action {
 	}
 
 	@Override
-	public void perform(NPC npc, Player player) {
+	public void perform(Player player) {
 		NPGuys.getPlugin().getServer().dispatchCommand(NPGuys.getPlugin().getServer().getConsoleSender(), command.replaceAll("%player", player.getName()));
 	}
 
@@ -63,7 +61,6 @@ public class RunCommand extends Action {
 	
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("command", command);
 	}
 

@@ -21,8 +21,6 @@ package goldob.npguys.action.quest;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -40,7 +38,7 @@ public class CompleteObjectives extends Action {
 	}
 	
 	@Override
-	public void perform(NPC npc, Player player) {
+	public void perform(Player player) {
 		ElementManager.getQuestHandler().completeObjectives(player, quest, objectives);	
 	}
 
@@ -84,7 +82,6 @@ public class CompleteObjectives extends Action {
 
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("quest", quest);
 		data.set("objectives", objectives);
 	}

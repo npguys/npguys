@@ -18,8 +18,6 @@
 
 package goldob.npguys.action;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -38,14 +36,17 @@ public abstract class Action {
 		return type;
 	}
 	
-	public abstract void perform(NPC npc, Player player);
+	public abstract void perform(Player player);
 	
 	public abstract void load(ConfigurationSection data) throws FailedToLoadException;
 	
 	public abstract void fromCommand(String[] data) throws InvalidCommandException;
 	
-	public void save(ConfigurationSection data) {
+	public abstract void save(ConfigurationSection data);
+	
+	public final void saveIt(ConfigurationSection data) {
 		data.set("type", getType());
+		save(data);
 	}
 	
 	public abstract String getDescription();

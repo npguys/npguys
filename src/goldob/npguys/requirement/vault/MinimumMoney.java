@@ -1,7 +1,5 @@
 package goldob.npguys.requirement.vault;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -18,7 +16,7 @@ public class MinimumMoney extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(NPC npc, Player player) {
+	public boolean isMet(Player player) {
 		return ElementManager.getEconomy().has(player, money);
 	}
 
@@ -54,7 +52,6 @@ public class MinimumMoney extends Requirement {
 
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("money", money);
 	}
 

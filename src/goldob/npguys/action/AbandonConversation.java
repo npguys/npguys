@@ -18,8 +18,6 @@
 
 package goldob.npguys.action;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -35,19 +33,15 @@ public class AbandonConversation extends Action {
 	}
 
 	@Override
-	public void perform(NPC npc, Player player) {
+	public void perform(Player player) {
 		ConversationManager.endConversation(player);
 	}
 
 	@Override
-	public void load(ConfigurationSection data) throws FailedToLoadException {
-		//Do nothing
-	}
+	public void load(ConfigurationSection data) throws FailedToLoadException {}
 
 	@Override
-	public void fromCommand(String[] data) throws InvalidCommandException {
-		//Do nothing
-	}
+	public void fromCommand(String[] data) throws InvalidCommandException {}
 
 	@Override
 	public String getDescription() {
@@ -63,4 +57,7 @@ public class AbandonConversation extends Action {
 	public String getData() {
 		return "";
 	}
+
+	@Override
+	public void save(ConfigurationSection data) {}
 }

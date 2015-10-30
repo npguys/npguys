@@ -18,8 +18,6 @@
 
 package goldob.npguys.action.quest;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -37,7 +35,7 @@ public class BeginQuest extends Action {
 	private String quest;
 
 	@Override
-	public void perform(NPC npc, Player player) {
+	public void perform(Player player) {
 		ElementManager.getQuestHandler().beginQuest(player, quest);
 	}
 
@@ -64,7 +62,6 @@ public class BeginQuest extends Action {
 
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("quest", quest);
 	}
 

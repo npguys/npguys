@@ -18,8 +18,6 @@
 
 package goldob.npguys.requirement;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -39,15 +37,18 @@ public abstract class Requirement {
 		return type;
 	}
 	
-	public abstract boolean isMet(NPC npc, Player player);
+	public abstract boolean isMet(Player player);
 
 	public abstract void load(ConfigurationSection data) throws FailedToLoadException;
 	
 	public abstract void fromCommand(String[] data) throws InvalidCommandException;
 	
-	public void save(ConfigurationSection data) {
+	public abstract void save(ConfigurationSection data);
+	
+	public final void saveIt(ConfigurationSection data) {
 		data.set("type", getType());
 		data.set("reversed", reversed);
+		save(data);
 	}
 	
 	public abstract String getDescription();

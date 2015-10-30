@@ -18,8 +18,6 @@
 
 package goldob.npguys.action;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -36,7 +34,7 @@ public class TakePermission extends Action {
 	}
 
 	@Override
-	public void perform(NPC npc, Player player) {
+	public void perform(Player player) {
 		player.addAttachment(NPGuys.getPlugin(), permission, false);
 		player.recalculatePermissions();
 	}
@@ -64,7 +62,6 @@ public class TakePermission extends Action {
 	
 	@Override
 	public void save(ConfigurationSection data) {
-		super.save(data);
 		data.set("permission", permission);
 	}
 	
