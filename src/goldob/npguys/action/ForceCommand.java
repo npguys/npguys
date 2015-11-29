@@ -2,8 +2,8 @@ package goldob.npguys.action;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -15,8 +15,8 @@ public class ForceCommand extends Action {
 	}
 
 	@Override
-	public void perform(Player player) {
-		Bukkit.getServer().dispatchCommand(player, command);
+	public void perform(Conversation context) {
+		Bukkit.getServer().dispatchCommand(context.getPlayer(), command);
 	}
 
 	@Override

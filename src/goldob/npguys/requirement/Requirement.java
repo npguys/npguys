@@ -19,8 +19,8 @@
 package goldob.npguys.requirement;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -37,7 +37,7 @@ public abstract class Requirement {
 		return type;
 	}
 	
-	public abstract boolean isMet(Player player);
+	public abstract boolean isMet(Conversation context);
 
 	public abstract void load(ConfigurationSection data) throws FailedToLoadException;
 	

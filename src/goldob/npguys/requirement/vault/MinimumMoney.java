@@ -1,9 +1,9 @@
 package goldob.npguys.requirement.vault;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import goldob.npguys.ElementManager;
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 import goldob.npguys.requirement.Requirement;
@@ -16,8 +16,8 @@ public class MinimumMoney extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(Player player) {
-		return ElementManager.getEconomy().has(player, money);
+	public boolean isMet(Conversation context) {
+		return ElementManager.getEconomy().has(context.getPlayer(), money);
 	}
 
 	@Override

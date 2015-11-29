@@ -78,7 +78,7 @@ public class NPGuy extends Trait {
 
 	private boolean areRequirementsMet(Player player, PlayerMessage response) {
 		for (Requirement requirement : response.getRequirements()) {
-			if (requirement.isMet(player) == requirement.isReversed()) {
+			if (requirement.isMet(ConversationManager.getConversationByCaller(player)) == requirement.isReversed()) {
 				return false;
 			}
 		}

@@ -62,7 +62,7 @@ public class Conversation {
 		ui.displayMessages();
 		
 		for(Action action : choosenResponse.getActions()) {
-			action.perform(player);
+			action.perform(this);
 		}
 		
 		if (!finish) {

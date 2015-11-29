@@ -19,9 +19,9 @@
 package goldob.npguys.action;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import goldob.npguys.NPGuys;
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -33,8 +33,8 @@ public class RunCommand extends Action {
 	}
 
 	@Override
-	public void perform(Player player) {
-		NPGuys.getPlugin().getServer().dispatchCommand(NPGuys.getPlugin().getServer().getConsoleSender(), command.replaceAll("%player", player.getName()));
+	public void perform(Conversation context) {
+		NPGuys.getPlugin().getServer().dispatchCommand(NPGuys.getPlugin().getServer().getConsoleSender(), command.replaceAll("%player", context.getPlayer().getName()));
 	}
 
 	@Override

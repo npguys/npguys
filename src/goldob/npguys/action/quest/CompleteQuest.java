@@ -19,10 +19,10 @@
 package goldob.npguys.action.quest;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import goldob.npguys.ElementManager;
 import goldob.npguys.action.Action;
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -34,8 +34,8 @@ public class CompleteQuest extends Action {
 	}
 	
 	@Override
-	public void perform(Player player) {
-		ElementManager.getQuestHandler().completeQuest(player, quest);
+	public void perform(Conversation context) {
+		ElementManager.getQuestHandler().completeQuest(context.getPlayer(), quest);
 	}
 
 	@Override

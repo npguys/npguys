@@ -1,8 +1,8 @@
 package goldob.npguys.requirement;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -14,8 +14,8 @@ public class MinimumLevel extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(Player player) {
-		return player.getLevel() >= minLevel;
+	public boolean isMet(Conversation context) {
+		return context.getPlayer().getLevel() >= minLevel;
 	}
 
 	@Override

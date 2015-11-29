@@ -19,9 +19,9 @@
 package goldob.npguys.requirement;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import goldob.npguys.ElementManager;
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -33,8 +33,8 @@ public class RequiredSkill extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(Player player) {
-		return ElementManager.getSkillHandler().hasSkill(player, skill);
+	public boolean isMet(Conversation context) {
+		return ElementManager.getSkillHandler().hasSkill(context.getPlayer(), skill);
 	}
 
 	@Override

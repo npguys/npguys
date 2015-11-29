@@ -22,6 +22,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import goldob.npguys.NPGuys;
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 
@@ -34,7 +35,8 @@ public class TakePermission extends Action {
 	}
 
 	@Override
-	public void perform(Player player) {
+	public void perform(Conversation context) {
+		Player player = context.getPlayer();
 		player.addAttachment(NPGuys.getPlugin(), permission, false);
 		player.recalculatePermissions();
 	}

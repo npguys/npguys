@@ -19,8 +19,8 @@
 package goldob.npguys.action;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.conversation.ConversationManager;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
@@ -33,8 +33,8 @@ public class AbandonConversation extends Action {
 	}
 
 	@Override
-	public void perform(Player player) {
-		ConversationManager.endConversation(player);
+	public void perform(Conversation context) {
+		ConversationManager.endConversation(context.getPlayer());
 	}
 
 	@Override

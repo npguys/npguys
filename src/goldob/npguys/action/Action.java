@@ -19,11 +19,10 @@
 package goldob.npguys.action;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
-
 
 public abstract class Action {
 	String type;
@@ -36,7 +35,7 @@ public abstract class Action {
 		return type;
 	}
 	
-	public abstract void perform(Player player);
+	public abstract void perform(Conversation context);
 	
 	public abstract void load(ConfigurationSection data) throws FailedToLoadException;
 	

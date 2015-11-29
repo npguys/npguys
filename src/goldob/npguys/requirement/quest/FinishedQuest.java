@@ -19,9 +19,9 @@
 package goldob.npguys.requirement.quest;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import goldob.npguys.ElementManager;
+import goldob.npguys.conversation.Conversation;
 import goldob.npguys.exception.FailedToLoadException;
 import goldob.npguys.exception.InvalidCommandException;
 import goldob.npguys.requirement.Requirement;
@@ -35,8 +35,8 @@ public class FinishedQuest extends Requirement {
 	}
 
 	@Override
-	public boolean isMet(Player player) {
-		return ElementManager.getQuestHandler().hasCompleted(player, quest);
+	public boolean isMet(Conversation context) {
+		return ElementManager.getQuestHandler().hasCompleted(context.getPlayer(), quest);
 	}
 
 	@Override
