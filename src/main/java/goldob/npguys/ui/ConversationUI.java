@@ -34,7 +34,7 @@ public abstract class ConversationUI implements Listener {
 	private static long npcDelay;
 	private static String playerMessageFormat;
 	private static String npcMessageFormat;
-	
+
 	// This will be called only once per each registered UI type.
 	// It should save any values it needs in a static way.
 	public void init(ConfigurationSection config) throws UIInitializationFailedException {
@@ -43,13 +43,13 @@ public abstract class ConversationUI implements Listener {
 		playerMessageFormat = generalConfig.getString("player.message_format");
 		npcMessageFormat = generalConfig.getString("npc.message_format");
 	}
-	
+
 	// Be aware that conversation may be null if constructor is called only for UI type
 	// initialization
 	public ConversationUI(Conversation conversation) {
 		this.conversation = conversation;
 	}
-	
+
 	// Called at the conversation start and when player picks next dialogue line
 	public final void displayMessages() {
 		final Conversation conversation = getConversation();
@@ -57,29 +57,29 @@ public abstract class ConversationUI implements Listener {
 		playerMsg = playerMsg.replaceAll("%msg", conversation.getDisplayedMessage().getMessage());
 		playerMsg = playerMsg.replaceAll("%player", conversation.getPlayer().getName());
 		playerMsg = playerMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
-		playerMsg = playerMsg.replace('&', 'ง');
+		playerMsg = playerMsg.replace('&', 'ยง');
 		if(!conversation.getDisplayedMessage().getMessage().equals("")) {
 			conversation.getPlayer().sendMessage(playerMsg);
 		}
-		
+
 		if(!conversation.getDisplayedMessage().getNPCMessage().getMessage().equals("")) {
 			String npcMsg = npcMessageFormat;
 
 			npcMsg = npcMsg.replaceAll("%msg", conversation.getDisplayedMessage().getNPCMessage().getMessage());
 			npcMsg = npcMsg.replaceAll("%player", conversation.getPlayer().getName());
 			npcMsg = npcMsg.replaceAll("%npc", conversation.getNPGuy().getNPC().getName());
-			npcMsg = npcMsg.replace('&', 'ง');
+			npcMsg = npcMsg.replace('&', 'ยง');
 			final String final_npcMsg = npcMsg;
-			
+
 			Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
 				@Override
 				public void run() {
 					conversation.getPlayer().sendMessage(final_npcMsg);
 				}
 			}, npcDelay);
-		}	
+		}
 	}
-	
+
 	public final void scheduleChoiceViewOpening() {
 		Bukkit.getScheduler().runTaskLater(NPGuys.getPlugin(), new Runnable() {
 			@Override
@@ -88,24 +88,24 @@ public abstract class ConversationUI implements Listener {
 			}
 		}, npcDelay);
 	}
-	
+
 	// Called at the beginning of conversation
 	public abstract void conversationStart();
-	
+
 	// After the method is called, the player should be able to choose his response
 	public abstract void responseChoice();
-	
+
 	// Called when the conversation ends
 	public abstract void conversationEnd();
-	
+
 	protected final Conversation getConversation() {
 		return conversation;
 	}
-	
+
 	protected final boolean checkPlayer(Player player) {
 		return player == conversation.getPlayer();
 	}
-	
+
 	protected final boolean checkNPC(NPC npc) {
 		return npc == conversation.getNPGuy().getNPC();
 	}

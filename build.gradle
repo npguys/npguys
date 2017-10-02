@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    compile 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    compile fileTree('libs')
+}
